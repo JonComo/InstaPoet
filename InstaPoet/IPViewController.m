@@ -29,7 +29,7 @@
 
 -(void)viewDidAppear:(BOOL)animated
 {
-    [[IPWorksCollection sharedCollection] loadLocalWorksCompletion:^(NSArray *works) {
+    [[IPWorksCollection sharedCollection]loadLocalWorksCompletion:^(NSArray *works) {
         localWorks = [works mutableCopy];
         [collectionViewWorks reloadData];
     }];

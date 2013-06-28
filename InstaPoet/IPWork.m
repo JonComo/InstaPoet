@@ -44,8 +44,7 @@
 
 -(void)save
 {
-    if (self.url)
-    {
+    if (self.url){
         if ([[NSFileManager defaultManager] fileExistsAtPath:[self.url path]]){
             [[NSFileManager defaultManager] removeItemAtURL:self.url error:nil];
         }
@@ -53,7 +52,9 @@
         NSDateFormatter *formatter = [NSDateFormatter new];
         [formatter setDateFormat:@"MMHHDDmmssSSSS"];
         
-        self.url = [NSURL URLWithString:[NSString stringWithFormat:@"%@/%@.txt", DOCUMENTS, [formatter stringFromDate:self.dateCreated]]];
+        NSString *documents = DOCUMENTS;
+        
+        self.url = [NSURL URLWithString:[NSString stringWithFormat:@"%@/%@.txt", documents, [formatter stringFromDate:self.dateCreated]]];
     }
     
     [NSKeyedArchiver archiveRootObject:self toFile:[self.url path]];
