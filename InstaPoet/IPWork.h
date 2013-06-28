@@ -8,13 +8,23 @@
 
 #import <Foundation/Foundation.h>
 
+@class MVMarkov;
+
+typedef enum
+{
+    kWorkTypeAuthor,
+    kWorkTypeUser
+} kWorkType;
+
 @interface IPWork : NSObject <NSCoding>
 
 @property (nonatomic, strong) NSURL *modelURL;
 @property (nonatomic, strong) NSString *text;
 @property (nonatomic, strong) NSURL *url;
 @property (nonatomic, strong) NSDate *dateCreated;
+@property (nonatomic, strong) MVMarkov *markov;
 
+-(id)initWithType:(kWorkType)type;
 -(void)save;
 
 @end

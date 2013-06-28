@@ -7,15 +7,40 @@
 //
 
 #import "IPWork.h"
+#import "MVMarkov.h"
 #import "Macros.h"
 
 @implementation IPWork
 
--(id)init
+-(id)initWithType:(kWorkType)type
 {
     if (self = [super init]) {
         //init
         _dateCreated = [NSDate date];
+        
+        NSDateFormatter *formatter = [NSDateFormatter new];
+        [formatter setDateFormat:@"MMHHDDmmssSSSS"];
+        
+        if (type == kWorkTypeAuthor)
+        {
+            _url = [NSURL URLWithString:[NSString stringWithFormat:@"%@/authors/", DOCUMENTS]];
+            
+            BOOL *directoryExists = NULL;
+            
+            [[NSFileManager defaultManager] fileExistsAtPath:[_url path] isDirectory:directoryExists];
+            
+            if (!directoryExists){
+                NSError *error;
+                [[NSFileManager defaultManager] createDirectoryAtPath:[_url path] withIntermediateDirectories:NO attributes:nil error:&error];
+                if (error) NSLog(@"%@", error);
+            }
+            
+            _url = [_url URLByAppendingPathComponent:[NSString stringWithFormat:@"author_%@.txt", [formatter stringFromDate:self.dateCreated]]];
+            
+        }else if (type == kWorkTypeUser)
+        {
+            _url = [NSURL URLWithString:[NSString stringWithFormat:@"%@/user_%@.txt", DOCUMENTS, [formatter stringFromDate:self.dateCreated]]];
+        }
     }
     
     return self;
@@ -29,6 +54,7 @@
         _modelURL = [aDecoder decodeObjectForKey:@"modelURL"];
         _url = [aDecoder decodeObjectForKey:@"url"];
         _dateCreated = [aDecoder decodeObjectForKey:@"dateCreated"];
+        _markov = [aDecoder decodeObjectForKey:@"markov"];
     }
     
     return self;
@@ -40,6 +66,7 @@
     [aCoder encodeObject:self.modelURL forKey:@"modelURL"];
     [aCoder encodeObject:self.url forKey:@"url"];
     [aCoder encodeObject:self.dateCreated forKey:@"dateCreated"];
+    [aCoder encodeObject:self.markov forKey:@"markov"];
 }
 
 -(void)save
@@ -48,13 +75,6 @@
         if ([[NSFileManager defaultManager] fileExistsAtPath:[self.url path]]){
             [[NSFileManager defaultManager] removeItemAtURL:self.url error:nil];
         }
-    }else{
-        NSDateFormatter *formatter = [NSDateFormatter new];
-        [formatter setDateFormat:@"MMHHDDmmssSSSS"];
-        
-        NSString *documents = DOCUMENTS;
-        
-        self.url = [NSURL URLWithString:[NSString stringWithFormat:@"%@/%@.txt", documents, [formatter stringFromDate:self.dateCreated]]];
     }
     
     [NSKeyedArchiver archiveRootObject:self toFile:[self.url path]];

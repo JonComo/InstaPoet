@@ -26,8 +26,18 @@
 
 -(void)loadLocalWorksCompletion:(void(^)(NSArray *works))block
 {
-    NSString *directory = DOCUMENTS;
+    [self filesInDirectory:DOCUMENTS completion:block];
+}
+
+-(void)loadLocalAuthorsCompletion:(void (^)(NSArray *))block
+{
+    NSString *authorsDirectory = [NSString stringWithFormat:@"%@/authors", DOCUMENTS];
     
+    [self filesInDirectory:authorsDirectory completion:block];
+}
+
+-(void)filesInDirectory:(NSString *)directory completion:(void(^)(NSArray *results))block
+{
     NSError *error;
     NSArray *files = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:directory error:&error];
     
@@ -41,7 +51,7 @@
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
         for (NSString *fileName in files)
         {
-            IPWork *work = [NSKeyedUnarchiver unarchiveObjectWithFile:[NSString stringWithFormat:@"%@/%@", DOCUMENTS, fileName]];
+            IPWork *work = [NSKeyedUnarchiver unarchiveObjectWithFile:[NSString stringWithFormat:@"%@/%@", directory, fileName]];
             
             if (work)
                 [works addObject:work];

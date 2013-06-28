@@ -27,8 +27,10 @@
 	// Do any additional setup after loading the view, typically from a nib.
 }
 
--(void)viewDidAppear:(BOOL)animated
+-(void)viewWillAppear:(BOOL)animated
 {
+    [super viewWillAppear:animated];
+    
     [[IPWorksCollection sharedCollection]loadLocalWorksCompletion:^(NSArray *works) {
         localWorks = [works mutableCopy];
         [collectionViewWorks reloadData];
@@ -43,7 +45,7 @@
 
 - (IBAction)new:(id)sender
 {
-    IPWork *newWork = [[IPWork alloc] init];
+    IPWork *newWork = [[IPWork alloc] initWithType:kWorkTypeUser];
     [self presentEditorWithWork:newWork];
 }
 

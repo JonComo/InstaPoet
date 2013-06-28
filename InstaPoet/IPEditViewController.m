@@ -7,12 +7,17 @@
 //
 
 #import "IPEditViewController.h"
+#import "IPAuthorsViewController.h"
+#import "MVMarkov.h"
 #import "IPWork.h"
 
-@interface IPEditViewController ()
+@interface IPEditViewController () <UITextViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout>
 {
     __weak IBOutlet UITextView *textViewMain;
     __weak IBOutlet NSLayoutConstraint *constraintBottom;
+    
+    __weak IBOutlet UICollectionView *collectionViewWords;
+    NSArray *wordsSuggested;
 }
 
 @end
@@ -62,8 +67,9 @@
 }
 
 - (IBAction)done:(id)sender
-{    
+{
     self.work.text = textViewMain.text;
+    
     [self.work save];
     
     [self dismissViewControllerAnimated:YES completion:nil];
@@ -75,6 +81,59 @@
     }else{
         [textViewMain becomeFirstResponder];
     }
+}
+
+- (IBAction)chooseInspiration:(id)sender
+{
+    IPAuthorsViewController *authorsVC = [self.storyboard instantiateViewControllerWithIdentifier:@"authorsVC"];
+    
+    authorsVC.workUser = self.work;
+    
+    [self presentViewController:authorsVC animated:YES completion:nil];
+}
+
+-(BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text
+{
+    if ([text isEqualToString:@" "]){
+        [self suggestWords];
+    }
+    
+    return YES;
+}
+
+-(void)suggestWords
+{
+    [self.work.markov suggestWordsAfterString:textViewMain.text completion:^(NSArray *words) {
+        wordsSuggested = [words copy];
+        [collectionViewWords reloadData];
+    }];
+}
+
+-(UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    UICollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"wordCell" forIndexPath:indexPath];
+    
+    NSString *word = wordsSuggested[indexPath.row];
+    
+    UILabel *label = (UILabel *)[cell viewWithTag:100];
+    
+    label.text = word;
+    
+    return cell;
+}
+
+-(NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
+{
+    return wordsSuggested.count;
+}
+
+-(void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    NSString *word = wordsSuggested[indexPath.row];
+    
+    textViewMain.text = [NSString stringWithFormat:@"%@%@ ", textViewMain.text, word];
+    
+    [self suggestWords];
 }
 
 @end

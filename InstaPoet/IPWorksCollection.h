@@ -13,5 +13,6 @@
 +(IPWorksCollection *)sharedCollection;
 
 -(void)loadLocalWorksCompletion:(void(^)(NSArray *works))block;
+-(void)loadLocalAuthorsCompletion:(void(^)(NSArray *authors))block;
 
 @end

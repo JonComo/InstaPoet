@@ -22,6 +22,7 @@
 		864C4842177BE553005505EC /* MVPhrase.m in Sources */ = {isa = PBXBuildFile; fileRef = 864C483F177BE553005505EC /* MVPhrase.m */; };
 		864C4846177BE9C7005505EC /* IPWork.m in Sources */ = {isa = PBXBuildFile; fileRef = 864C4845177BE9C7005505EC /* IPWork.m */; };
 		864C4849177BEA26005505EC /* IPWorksCollection.m in Sources */ = {isa = PBXBuildFile; fileRef = 864C4848177BEA26005505EC /* IPWorksCollection.m */; };
+		86AB4904177D35F800AC46AC /* IPAuthorsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 86AB4903177D35F800AC46AC /* IPAuthorsViewController.m */; };
 		86B9BD21177BF0DB00DF4B4A /* IPEditViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 86B9BD20177BF0DB00DF4B4A /* IPEditViewController.m */; };
 /* End PBXBuildFile section */
 
@@ -51,6 +52,8 @@
 		864C4847177BEA26005505EC /* IPWorksCollection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IPWorksCollection.h; sourceTree = "<group>"; };
 		864C4848177BEA26005505EC /* IPWorksCollection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IPWorksCollection.m; sourceTree = "<group>"; };
 		864C484A177BEABE005505EC /* Macros.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Macros.h; sourceTree = "<group>"; };
+		86AB4902177D35F800AC46AC /* IPAuthorsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IPAuthorsViewController.h; sourceTree = "<group>"; };
+		86AB4903177D35F800AC46AC /* IPAuthorsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IPAuthorsViewController.m; sourceTree = "<group>"; };
 		86B9BD1F177BF0DB00DF4B4A /* IPEditViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IPEditViewController.h; sourceTree = "<group>"; };
 		86B9BD20177BF0DB00DF4B4A /* IPEditViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IPEditViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -146,6 +149,8 @@
 				864C4833177BE53E005505EC /* IPViewController.m */,
 				86B9BD1F177BF0DB00DF4B4A /* IPEditViewController.h */,
 				86B9BD20177BF0DB00DF4B4A /* IPEditViewController.m */,
+				86AB4902177D35F800AC46AC /* IPAuthorsViewController.h */,
+				86AB4903177D35F800AC46AC /* IPAuthorsViewController.m */,
 			);
 			name = View;
 			sourceTree = "<group>";
@@ -225,6 +230,7 @@
 				864C4846177BE9C7005505EC /* IPWork.m in Sources */,
 				864C4849177BEA26005505EC /* IPWorksCollection.m in Sources */,
 				86B9BD21177BF0DB00DF4B4A /* IPEditViewController.m in Sources */,
+				86AB4904177D35F800AC46AC /* IPAuthorsViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
