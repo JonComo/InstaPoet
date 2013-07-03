@@ -14,8 +14,7 @@
 {
     if (self = [super init]) {
         //init
-        _nextWords = [[NSMutableArray alloc] init];
-        
+        _nextPhrases = [NSMutableArray array];
     }
     
     return self;
@@ -25,8 +24,9 @@
 {
     if (self = [super init]) {
         //init
-        _nextWords = [aDecoder decodeObjectForKey:@"nextWords"];
+        _nextPhrases = [aDecoder decodeObjectForKey:@"nextPhrases"];
         _text = [aDecoder decodeObjectForKey:@"text"];
+        _count = [aDecoder decodeIntForKey:@"count"];
     }
     
     return self;
@@ -35,7 +35,8 @@
 -(void)encodeWithCoder:(NSCoder *)aCoder
 {
     [aCoder encodeObject:self.text forKey:@"text"];
-    [aCoder encodeObject:self.nextWords forKey:@"nextWords"];
+    [aCoder encodeObject:self.nextPhrases forKey:@"nextPhrases"];
+    [aCoder encodeInt:self.count forKey:@"count"];
 }
 
 @end

@@ -8,6 +8,7 @@
 
 #import "IPWork.h"
 #import "MVMarkov.h"
+#import "IPWorksCollection.h"
 #import "Macros.h"
 
 @implementation IPWork
@@ -17,30 +18,24 @@
     if (self = [super init]) {
         //init
         _dateCreated = [NSDate date];
+        _type = type;
         
         NSDateFormatter *formatter = [NSDateFormatter new];
-        [formatter setDateFormat:@"MMHHDDmmssSSSS"];
+        [formatter setDateFormat:@"MMddyyyyhhmmssSSSS"];
         
-        if (type == kWorkTypeAuthor)
-        {
-            _url = [NSURL URLWithString:[NSString stringWithFormat:@"%@/authors/", DOCUMENTS]];
-            
-            BOOL *directoryExists = NULL;
-            
-            [[NSFileManager defaultManager] fileExistsAtPath:[_url path] isDirectory:directoryExists];
-            
-            if (!directoryExists){
-                NSError *error;
-                [[NSFileManager defaultManager] createDirectoryAtPath:[_url path] withIntermediateDirectories:NO attributes:nil error:&error];
-                if (error) NSLog(@"%@", error);
-            }
-            
-            _url = [_url URLByAppendingPathComponent:[NSString stringWithFormat:@"author_%@.txt", [formatter stringFromDate:self.dateCreated]]];
-            
-        }else if (type == kWorkTypeUser)
-        {
-            _url = [NSURL URLWithString:[NSString stringWithFormat:@"%@/user_%@.txt", DOCUMENTS, [formatter stringFromDate:self.dateCreated]]];
+        NSString *identifier;
+        
+        if (type == kWorkTypeAuthor){
+            identifier = @"author";
+        }else if (type == kWorkTypeUser){
+            identifier = @"work";
         }
+        
+        _url = [NSURL URLWithString:[NSString stringWithFormat:@"%@/%@s/", DOCUMENTS, identifier]];
+        
+        [[IPWorksCollection sharedCollection] createDirectoryAtURL:_url];
+        
+        _url = [_url URLByAppendingPathComponent:[NSString stringWithFormat:@"%@_%@.txt", identifier, [formatter stringFromDate:self.dateCreated]]];
     }
     
     return self;
@@ -51,10 +46,10 @@
     if (self = [super init]) {
         //init
         _text = [aDecoder decodeObjectForKey:@"text"];
-        _modelURL = [aDecoder decodeObjectForKey:@"modelURL"];
+        _authorWorkURL = [aDecoder decodeObjectForKey:@"authorWorkURL"];
         _url = [aDecoder decodeObjectForKey:@"url"];
         _dateCreated = [aDecoder decodeObjectForKey:@"dateCreated"];
-        _markov = [aDecoder decodeObjectForKey:@"markov"];
+        _type = [aDecoder decodeIntForKey:@"type"];
     }
     
     return self;
@@ -63,21 +58,43 @@
 -(void)encodeWithCoder:(NSCoder *)aCoder
 {
     [aCoder encodeObject:self.text forKey:@"text"];
-    [aCoder encodeObject:self.modelURL forKey:@"modelURL"];
+    [aCoder encodeObject:self.authorWorkURL forKey:@"authorWorkURL"];
     [aCoder encodeObject:self.url forKey:@"url"];
     [aCoder encodeObject:self.dateCreated forKey:@"dateCreated"];
-    [aCoder encodeObject:self.markov forKey:@"markov"];
+    [aCoder encodeInt:self.type forKey:@"type"];
 }
 
--(void)save
+-(BOOL)save
 {
+    NSError *error;
+    
     if (self.url){
         if ([[NSFileManager defaultManager] fileExistsAtPath:[self.url path]]){
-            [[NSFileManager defaultManager] removeItemAtURL:self.url error:nil];
+            [[NSFileManager defaultManager] removeItemAtURL:self.url error:&error];
         }
     }
     
     [NSKeyedArchiver archiveRootObject:self toFile:[self.url path]];
+    
+    return error ? NO : YES;
+}
+
+-(BOOL)deleteWork
+{
+    NSError *error;
+    [[NSFileManager defaultManager] removeItemAtPath:[self.url path] error:&error];
+    
+    return error ? NO : YES;
+}
+
+-(void)loadModelCompletion:(void(^)(void))block
+{
+    if (self.authorWorkURL){
+        IPWork *authorWork = [NSKeyedUnarchiver unarchiveObjectWithFile:[self.authorWorkURL path]];
+        
+        self.model = [MVMarkov new];
+        [self.model generateModelWithString:authorWork.text completion:block];
+    }
 }
 
 @end

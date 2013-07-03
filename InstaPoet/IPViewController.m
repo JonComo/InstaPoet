@@ -7,14 +7,23 @@
 //
 
 #import "IPViewController.h"
+#import "IPMoreViewController.h"
 #import "IPEditViewController.h"
 #import "IPWorksCollection.h"
+#import "IPButton.h"
+#import "MBProgressHUD.h"
 #import "IPWork.h"
+
+#import <QuartzCore/QuartzCore.h>
 
 @interface IPViewController () <UICollectionViewDataSource, UICollectionViewDelegateFlowLayout>
 {
     NSMutableArray *localWorks;
     __weak IBOutlet UICollectionView *collectionViewWorks;
+    __weak IBOutlet IPButton *buttonInstapoet;
+    __weak IBOutlet IPButton *buttonNew;
+    
+    BOOL isRotating;
 }
 
 @end
@@ -25,16 +34,52 @@
 {
     [super viewDidLoad];
 	// Do any additional setup after loading the view, typically from a nib.
+    
+    [self loadWorksShowProgress:YES];
 }
 
 -(void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
     
-    [[IPWorksCollection sharedCollection]loadLocalWorksCompletion:^(NSArray *works) {
-        localWorks = [works mutableCopy];
-        [collectionViewWorks reloadData];
-    }];
+    [self loadWorksShowProgress:NO];
+}
+
+- (CAAnimation*)getShakeAnimation
+{
+    CAKeyframeAnimation* animation = [CAKeyframeAnimation animationWithKeyPath:@"transform"];
+    
+    CGFloat wobbleAngle = 0.15f;
+    
+    NSValue* valLeft = [NSValue valueWithCATransform3D:CATransform3DMakeRotation(wobbleAngle, 0.0f, 0.0f, 1.0f)];
+    NSValue* valRight = [NSValue valueWithCATransform3D:CATransform3DMakeRotation(-wobbleAngle, 0.0f, 0.0f, 1.0f)];
+    animation.values = [NSArray arrayWithObjects:valLeft, valRight, nil];
+    
+    animation.autoreverses = YES;
+    animation.duration = 0.1;
+    animation.repeatCount = INT_MAX;
+    
+    return animation;
+}
+
+- (IBAction)instaPoet:(id)sender
+{
+    IPMoreViewController *moreVC = [self.storyboard instantiateViewControllerWithIdentifier:@"moreVC"];
+    
+    moreVC.modalTransitionStyle = UIModalTransitionStyleFlipHorizontal;
+    [self presentViewController:moreVC animated:YES completion:nil];
+}
+
+-(void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
+{
+    isRotating = YES;
+    [collectionViewWorks.collectionViewLayout invalidateLayout];
+    //[collectionViewWorks reloadData];
+}
+
+-(void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation
+{
+    isRotating = NO;
 }
 
 - (void)didReceiveMemoryWarning
@@ -43,9 +88,32 @@
     // Dispose of any resources that can be recreated.
 }
 
+-(void)loadWorksShowProgress:(BOOL)show
+{
+    if (show)
+    {
+        MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:NO];
+        [hud setMode:MBProgressHUDModeIndeterminate];
+        hud.labelText = @"Loading Works";
+    }
+    
+    [[IPWorksCollection sharedCollection] loadLocalWorksCompletion:^(NSArray *works) {
+        if (show) [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+        localWorks = [works mutableCopy];
+        [collectionViewWorks reloadData];
+        
+        if (works.count == 0){
+            [buttonNew.layer addAnimation:[self getShakeAnimation] forKey:@"wiggle"];
+        }
+    }];
+}
+
 - (IBAction)new:(id)sender
 {
+    [buttonNew.layer removeAllAnimations];
+    
     IPWork *newWork = [[IPWork alloc] initWithType:kWorkTypeUser];
+    
     [self presentEditorWithWork:newWork];
 }
 
@@ -72,7 +140,12 @@
     
     UITextView *textView = (UITextView *)[cell viewWithTag:100];
     
-    textView.text = work.text;
+    NSString *subString = [work.text substringToIndex:MIN(work.text.length, 200)];
+    
+    textView.text = subString;
+    
+    UIView *divider = [cell viewWithTag:200];
+    divider.alpha = (indexPath.row == localWorks.count-1) ? 0 : 1;
     
     return cell;
 }
@@ -81,6 +154,24 @@
 {
     IPWork *work = localWorks[indexPath.row];
     [self presentEditorWithWork:work];
+}
+
+-(CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    IPWork *work = localWorks[indexPath.row];
+    
+    float newWidth = self.view.frame.size.width;
+    
+    if (self.interfaceOrientation != UIInterfaceOrientationPortrait && isRotating)
+    {
+        newWidth = self.view.frame.size.height;
+    }
+    
+    NSString *subString = [work.text substringToIndex:MIN(work.text.length, 200)];
+    
+    CGSize workSize = [subString sizeWithFont:[UIFont systemFontOfSize:14] constrainedToSize:CGSizeMake(newWidth, 220)];
+    
+    return CGSizeMake(newWidth, workSize.height + 20);
 }
 
 @end

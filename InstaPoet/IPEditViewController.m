@@ -8,16 +8,23 @@
 
 #import "IPEditViewController.h"
 #import "IPAuthorsViewController.h"
+#import "IPWorkOptionsViewController.h"
 #import "MVMarkov.h"
+#import "MVPhrase.h"
 #import "IPWork.h"
 
 @interface IPEditViewController () <UITextViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout>
 {
     __weak IBOutlet UITextView *textViewMain;
     __weak IBOutlet NSLayoutConstraint *constraintBottom;
+    __weak IBOutlet NSLayoutConstraint *constraintControlsHeight;
+    
+    __weak IBOutlet UIView *viewControls;
+    
+    __weak IBOutlet UIButton *buttonInspiration;
     
     __weak IBOutlet UICollectionView *collectionViewWords;
-    NSArray *wordsSuggested;
+    NSArray *phrasesSuggested;
 }
 
 @end
@@ -31,7 +38,30 @@
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillChangeFrame:) name:UIKeyboardWillChangeFrameNotification object:nil];
     
+    if (!self.work.model)
+    {
+        [self.work loadModelCompletion:^{
+            [self showInspiration];
+        }];
+    }
+    
+    if (self.work.type == kWorkTypeAuthor)
+    {
+        buttonInspiration.alpha = 0;
+        buttonInspiration.enabled = NO;
+    }
+    
     textViewMain.text = self.work.text;
+    
+    constraintControlsHeight.constant = 40;
+    [self.view layoutSubviews];
+}
+
+-(void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    
+    [self showInspiration];
 }
 
 -(void)viewDidAppear:(BOOL)animated
@@ -43,10 +73,47 @@
     }
 }
 
+-(void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+    
+    [self saveWork];
+}
+
+-(void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
+{
+    viewControls.alpha = 0;
+}
+
+-(void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation
+{
+    [UIView animateWithDuration:0.3 animations:^{
+        viewControls.alpha = 1;
+    }];
+}
+
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+-(void)dealloc
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
+-(void)showInspiration
+{
+    if (self.work.model)
+    {
+        [buttonInspiration setTitle:@"Inspiration (On)" forState:UIControlStateNormal];
+    }else{
+        [buttonInspiration setTitle:@"Inspiration (Off)" forState:UIControlStateNormal];
+        
+        constraintControlsHeight.constant = 40;
+        [self.view layoutSubviews];
+    }
 }
 
 -(void)keyboardWillChangeFrame:(NSNotification *)notification
@@ -57,25 +124,47 @@
     float animationDuration = [[notification.userInfo valueForKey:UIKeyboardAnimationDurationUserInfoKey] floatValue];
     
     [UIView animateWithDuration:animationDuration animations:^{
-        float statusHeight = [UIApplication sharedApplication].statusBarFrame.size.height;
         
-        float offset = (self.view.frame.size.height + statusHeight - keyboardRect.origin.y);
+        float statusHeight = [UIApplication sharedApplication].statusBarFrame.size.height;
+        float frameHeight = self.view.frame.size.height;
+        
+        float offset = (frameHeight + statusHeight - keyboardRect.origin.y);
+        
+        if (self.interfaceOrientation != UIInterfaceOrientationPortrait){
+            statusHeight = [UIApplication sharedApplication].statusBarFrame.size.width;
+            frameHeight = self.view.frame.size.width;
+        }
+        
+        if (self.interfaceOrientation == UIInterfaceOrientationLandscapeRight)
+        {
+            offset = keyboardRect.size.width;
+        }else if (self.interfaceOrientation == UIInterfaceOrientationLandscapeLeft){
+            offset = (frameHeight + statusHeight - keyboardRect.origin.x);
+        }
+        
         constraintBottom.constant = offset;
-        NSLog(@"x: %f y: %f w:%f h:%f", keyboardRect.origin.x, keyboardRect.origin.y, keyboardRect.size.width, keyboardRect.size.height);
         [self.view layoutSubviews];
     }];
 }
 
+-(void)saveWork
+{
+    if (textViewMain.text.length > 0)
+    {
+        self.work.text = textViewMain.text;
+        [self.work save];
+    }else{
+        [self.work deleteWork];
+    }
+}
+
 - (IBAction)done:(id)sender
 {
-    self.work.text = textViewMain.text;
-    
-    [self.work save];
-    
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
-- (IBAction)keyboardToggle:(id)sender {
+- (IBAction)keyboardToggle:(id)sender
+{
     if ([textViewMain isFirstResponder]){
         [textViewMain resignFirstResponder];
     }else{
@@ -92,6 +181,18 @@
     [self presentViewController:authorsVC animated:YES completion:nil];
 }
 
+- (IBAction)options:(id)sender
+{
+    IPWorkOptionsViewController *optionsVC = [self.storyboard instantiateViewControllerWithIdentifier:@"optionsVC"];
+    
+    [self saveWork];
+    
+    optionsVC.work = self.work;
+    
+    optionsVC.modalTransitionStyle = UIModalTransitionStyleFlipHorizontal;
+    [self presentViewController:optionsVC animated:YES completion:nil];
+}
+
 -(BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text
 {
     if ([text isEqualToString:@" "]){
@@ -103,9 +204,23 @@
 
 -(void)suggestWords
 {
-    [self.work.markov suggestWordsAfterString:textViewMain.text completion:^(NSArray *words) {
-        wordsSuggested = [words copy];
+    [self.work.model suggestWordsForString:textViewMain.text completion:^(NSArray *words) {
+        phrasesSuggested = [words copy];
         [collectionViewWords reloadData];
+        
+        float targetHeight = 40;
+        if (words.count > 0)
+            targetHeight = 80;
+        
+        [UIView animateWithDuration:0.3 animations:^{
+            constraintControlsHeight.constant = targetHeight;
+            [self.view layoutSubviews];
+        }];
+        
+        if (textViewMain.contentSize.height > textViewMain.frame.size.height){
+            CGPoint offset = CGPointMake(0, textViewMain.contentSize.height - textViewMain.frame.size.height);
+            [textViewMain setContentOffset:offset animated:YES];
+        }
     }];
 }
 
@@ -113,27 +228,34 @@
 {
     UICollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"wordCell" forIndexPath:indexPath];
     
-    NSString *word = wordsSuggested[indexPath.row];
+    MVPhrase *phrase = phrasesSuggested[indexPath.row];
     
     UILabel *label = (UILabel *)[cell viewWithTag:100];
     
-    label.text = word;
+    label.text = phrase.text;
     
     return cell;
 }
 
 -(NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
 {
-    return wordsSuggested.count;
+    return phrasesSuggested.count;
 }
 
 -(void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSString *word = wordsSuggested[indexPath.row];
+    MVPhrase *phrase = phrasesSuggested[indexPath.row];
     
-    textViewMain.text = [NSString stringWithFormat:@"%@%@ ", textViewMain.text, word];
+    textViewMain.text = [NSString stringWithFormat:@"%@%@", textViewMain.text, phrase.text];
+}
+
+-(CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    MVPhrase *phrase = phrasesSuggested[indexPath.row];
     
-    [self suggestWords];
+    CGSize wordSize = [phrase.text sizeWithFont:[UIFont fontWithName:@"Helvetica" size:17]];
+    
+    return CGSizeMake(wordSize.width + 20, 40);
 }
 
 @end

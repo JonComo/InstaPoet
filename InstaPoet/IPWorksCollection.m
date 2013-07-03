@@ -26,7 +26,9 @@
 
 -(void)loadLocalWorksCompletion:(void(^)(NSArray *works))block
 {
-    [self filesInDirectory:DOCUMENTS completion:block];
+    NSString *worksDirectory = [NSString stringWithFormat:@"%@/works", DOCUMENTS];
+    
+    [self filesInDirectory:worksDirectory completion:block];
 }
 
 -(void)loadLocalAuthorsCompletion:(void (^)(NSArray *))block
@@ -57,10 +59,26 @@
                 [works addObject:work];
         }
         
+        [works sortUsingComparator:^NSComparisonResult(id obj1, id obj2) {
+            IPWork *work1 = obj1;
+            IPWork *work2 = obj2;
+            
+            return [work1.dateCreated compare:work2.dateCreated];
+        }];
+        
         dispatch_async(dispatch_get_main_queue(), ^{
             if (block) block(works);
         });
     });
+}
+
+-(void)createDirectoryAtURL:(NSURL *)url
+{
+    if (![[NSFileManager defaultManager] fileExistsAtPath:[url path] isDirectory:nil]){
+        NSError *error;
+        [[NSFileManager defaultManager] createDirectoryAtPath:[url path] withIntermediateDirectories:NO attributes:nil error:&error];
+        if (error) NSLog(@"%@", error);
+    }
 }
 
 @end

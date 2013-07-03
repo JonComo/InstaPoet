@@ -9,6 +9,8 @@
 #import "IPAuthorsViewController.h"
 #import "IPEditViewController.h"
 #import "IPWorksCollection.h"
+#import "MBProgressHUD.h"
+#import "IPButtonCell.h"
 #import "MVMarkov.h"
 #import "IPWork.h"
 
@@ -16,6 +18,8 @@
 {
     NSMutableArray *localAuthors;
     __weak IBOutlet UICollectionView *collectionViewAuthors;
+    
+    BOOL isRotating;
 }
 
 @end
@@ -32,10 +36,27 @@
 {
     [super viewWillAppear:animated];
     
+    MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+    [hud setMode:MBProgressHUDModeIndeterminate];
+    hud.labelText = @"Loading Inspiration";
+    
     [[IPWorksCollection sharedCollection] loadLocalAuthorsCompletion:^(NSArray *authors) {
+        [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
         localAuthors = [authors mutableCopy];
         [collectionViewAuthors reloadData];
     }];
+}
+
+-(void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
+{
+    isRotating = YES;
+    [collectionViewAuthors.collectionViewLayout invalidateLayout];
+    //[collectionViewWorks reloadData];
+}
+
+-(void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation
+{
+    isRotating = NO;
 }
 
 - (void)didReceiveMemoryWarning
@@ -44,8 +65,9 @@
     // Dispose of any resources that can be recreated.
 }
 
-- (IBAction)cancel:(id)sender
+- (IBAction)off:(id)sender
 {
+    self.workUser.model = nil;
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
@@ -56,13 +78,9 @@
     [self presentEditorWithWork:newAuthor];
 }
 
--(void)editAuthor:(UIButton *)sender
+-(void)editAuthor:(IPButtonCell *)sender
 {
-    UICollectionViewCell *cell = (UICollectionViewCell*)[sender superview];
-    
-    NSIndexPath *indexPath = [collectionViewAuthors indexPathForCell:cell];
-    
-    IPWork *author = localAuthors[indexPath.row];
+    IPWork *author = localAuthors[sender.indexPath.row];
     
     [self presentEditorWithWork:author];
 }
@@ -82,7 +100,8 @@
     
     UICollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"authorCell" forIndexPath:indexPath];
     
-    UIButton *editButton = (UIButton *)[cell viewWithTag:200];
+    IPButtonCell *editButton = (IPButtonCell *)[cell viewWithTag:200];
+    editButton.indexPath = indexPath;
     
     if (editButton.allTargets.count == 0)
     {
@@ -91,7 +110,11 @@
     
     UITextView *textView = (UITextView *)[cell viewWithTag:100];
     
-    textView.text = author.text;
+    NSString *subText = [author.text substringToIndex:MIN(author.text.length, 200)];
+    textView.text = subText;
+    
+    UIView *divider = [cell viewWithTag:300];
+    divider.alpha = (indexPath.row == localAuthors.count-1) ? 0 : 1;
     
     return cell;
 }
@@ -105,17 +128,35 @@
 {
     IPWork *author = localAuthors[indexPath.row];
     
-    self.workUser.modelURL = author.url;
+    self.workUser.authorWorkURL = author.url;
     
-    MVMarkov *markov = [MVMarkov new];
+    MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+    [hud setMode:MBProgressHUDModeIndeterminate];
+    hud.labelText = @"Generating Model";
     
-    NSLog(@"Generating model");
-    
-    [markov buildModelWithAuthorWork:author.text contextLevel:1 completion:^{
-        self.workUser.markov = markov;
-        [self.workUser save];
+    [self.workUser loadModelCompletion:^{
+        [MBProgressHUD hideAllHUDsForView:self.view animated:NO];
+        
         [self dismissViewControllerAnimated:YES completion:nil];
     }];
+}
+
+-(CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    IPWork *author = localAuthors[indexPath.row];
+    
+    float newWidth = self.view.frame.size.width;
+    
+    if (self.interfaceOrientation != UIInterfaceOrientationPortrait && isRotating)
+    {
+        newWidth = self.view.frame.size.height;
+    }
+    
+    NSString *subText = [author.text substringToIndex:MIN(author.text.length, 200)];
+    
+    CGSize workSize = [subText sizeWithFont:[UIFont systemFontOfSize:14] constrainedToSize:CGSizeMake(newWidth, 110)];
+    
+    return CGSizeMake(newWidth, workSize.height + 20);
 }
 
 @end

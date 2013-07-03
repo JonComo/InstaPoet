@@ -12,7 +12,7 @@
 
 @property (nonatomic, strong) NSString *name;
 
--(void)buildModelWithAuthorWork:(NSString *)work contextLevel:(u_int)desiredContextLevel completion:(void (^)(void))block;
--(void)suggestWordsAfterString:(NSString *)wordsString completion:(void (^)(NSArray *words))block;
+-(void)generateModelWithString:(NSString *)string completion:(void(^)(void))block;
+-(void)suggestWordsForString:(NSString *)string completion:(void(^)(NSArray *words))block;
 
 @end

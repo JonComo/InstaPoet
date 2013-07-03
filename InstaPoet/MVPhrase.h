@@ -11,7 +11,8 @@
 @interface MVPhrase : NSObject <NSCoding>
 
 @property (strong, nonatomic) NSString *text;
-@property (strong, nonatomic) NSMutableArray *nextWords;
+@property (strong, nonatomic) NSMutableArray *nextPhrases;
+@property int count;
 
 -(id)init;
 

@@ -41,21 +41,24 @@
     [aCoder encodeObject:self.name forKey:@"name"];
 }
 
--(void)buildModelWithAuthorWork:(NSString *)work contextLevel:(u_int)desiredContextLevel completion:(void (^)(void))block
+/*
+
+-(void)generateWithAuthorWork:(NSString *)work contextLevel:(u_int)desiredContextLevel completion:(void (^)(void))block
 {
+    NSLog(@"Generating model");
+    
     contextLevel = desiredContextLevel;
-    //IPAuthor *author = [[IPAuthor alloc] initWithFileURL:authorURL];
     
     if (phrases) {
         [phrases removeAllObjects];
     }else{
-        phrases = [[NSMutableArray alloc] init];
+        phrases = [NSMutableArray array];
     }
     
     //enumerate string and layout relationships
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
         
-        NSString *string = work;
+        NSString *string = [work lowercaseString];
         
         [string enumerateLinesUsingBlock:^(NSString *line, BOOL *stop) {
             
@@ -84,6 +87,7 @@
                             
                             if (phrase) {
                                 //Phrase did exist in array alread, just add relationships
+                                phrase.count ++;
                             }else{
                                 //Phrase didn't exist, so create it now and add it to the array
                                 phrase = [[MVPhrase alloc] init];
@@ -114,35 +118,6 @@
     });
 }
 
--(NSArray *)wordsFromString:(NSString *)string
-{
-    NSMutableArray *words = [[NSMutableArray alloc] init];
-    
-    NSRange range;
-    range.location = 0;
-    range.length = string.length;
-    
-    [string enumerateSubstringsInRange:range options:NSStringEnumerationByWords usingBlock:^(NSString *substring, NSRange substringRange, NSRange enclosingRange, BOOL *stop) {
-        //Construct a phrase for each word
-        [words addObject:substring];
-    }];
-    
-    return words;
-}
-
--(MVPhrase *)phraseForString:(NSString *)string inArray:(NSMutableArray *)phrasesArray
-{
-    NSIndexSet *set = [phrasesArray indexesOfObjectsPassingTest:^BOOL(id obj, NSUInteger idx, BOOL *stop) {
-        MVPhrase *phrase = (MVPhrase *)obj;
-        BOOL foundPhrase = [phrase.text isEqualToString:string];
-        if (foundPhrase) *stop = YES;
-        return foundPhrase;
-    }];
-    
-    if (set.count >= 1) return [phrasesArray objectAtIndex:set.firstIndex];
-    
-    return nil;
-}
 
 -(void)suggestWordsAfterString:(NSString *)wordsString completion:(void (^)(NSArray *words))block
 {
@@ -183,12 +158,110 @@
             return [obj2 compare:obj1];
         }];
         
-        
         dispatch_async(dispatch_get_main_queue(), ^{
             //Call completion block when done:
             block(sortedKeys);
         });
     });
+}
+
+*/
+
+-(void)generateModelWithString:(NSString *)string completion:(void(^)(void))block
+{
+    if (!phrases){
+        phrases = [NSMutableArray array];
+    }else{
+        [phrases removeAllObjects];
+    }
+    
+    string = [string lowercaseString];
+    
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
+        [string enumerateLinesUsingBlock:^(NSString *line, BOOL *stop) {
+            NSArray *words = [self wordsFromString:line];
+            
+            [words enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+                NSString *word = (NSString *)obj;
+                
+                MVPhrase *phrase = [self phraseForString:word inArray:phrases increment:YES];
+                
+                int nextWordIndex = idx + 1;
+                
+                if (nextWordIndex < words.count)
+                {
+                    NSString *nextWord = words[nextWordIndex];
+                    
+                    MVPhrase *nextPhrase = [self phraseForString:nextWord inArray:phrases increment:YES];
+                    
+                    if (![phrase.nextPhrases containsObject:nextPhrase])
+                        [phrase.nextPhrases addObject:nextPhrase];
+                }
+            }];
+        }];
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if (block) block();
+        });
+    });
+}
+
+-(void)suggestWordsForString:(NSString *)string completion:(void(^)(NSArray *words))block
+{
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
+        
+        NSArray *words = [self wordsFromString:[string lowercaseString]];
+        NSString *lastWord = [words lastObject];
+        
+        MVPhrase *phrase = [self phraseForString:lastWord inArray:phrases increment:NO];
+        
+        NSMutableArray *nextPhrases = phrase.nextPhrases;
+        
+        [nextPhrases sortUsingComparator:^NSComparisonResult(id obj1, id obj2) {
+            MVPhrase *phrase1 = obj1;
+            MVPhrase *phrase2 = obj2;
+            
+            return (phrase1.count > phrase2.count);
+        }];
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if (block) block(phrase.nextPhrases);
+        });
+    });
+}
+
+-(NSArray *)wordsFromString:(NSString *)string
+{
+    NSMutableArray *words = [NSMutableArray array];
+    
+    NSRange range;
+    range.location = 0;
+    range.length = string.length;
+    
+    [string enumerateSubstringsInRange:range options:NSStringEnumerationByWords usingBlock:^(NSString *substring, NSRange substringRange, NSRange enclosingRange, BOOL *stop) {
+        //Construct a phrase for each word
+        [words addObject:substring];
+    }];
+    
+    return words;
+}
+
+-(MVPhrase *)phraseForString:(NSString *)string inArray:(NSMutableArray *)phrasesArray increment:(BOOL)increment
+{
+    for (MVPhrase *phrase in phrasesArray)
+    {
+        if ([phrase.text isEqualToString:string])
+        {
+            if (increment) phrase.count ++;
+            return phrase;
+        }
+    }
+    
+    MVPhrase *newPhrase = [MVPhrase new];
+    newPhrase.text = string;
+    [phrasesArray addObject:newPhrase];
+    
+    return newPhrase;
 }
 
 @end

@@ -18,13 +18,17 @@ typedef enum
 
 @interface IPWork : NSObject <NSCoding>
 
-@property (nonatomic, strong) NSURL *modelURL;
+@property (nonatomic, strong) NSURL *authorWorkURL;
 @property (nonatomic, strong) NSString *text;
 @property (nonatomic, strong) NSURL *url;
 @property (nonatomic, strong) NSDate *dateCreated;
-@property (nonatomic, strong) MVMarkov *markov;
+@property kWorkType type;
+
+@property (nonatomic, strong) MVMarkov *model;
 
 -(id)initWithType:(kWorkType)type;
--(void)save;
+-(void)loadModelCompletion:(void(^)(void))block;
+-(BOOL)save;
+-(BOOL)deleteWork;
 
 @end
