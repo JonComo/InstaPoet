@@ -22,6 +22,7 @@
 		864C4842177BE553005505EC /* MVPhrase.m in Sources */ = {isa = PBXBuildFile; fileRef = 864C483F177BE553005505EC /* MVPhrase.m */; };
 		864C4846177BE9C7005505EC /* IPWork.m in Sources */ = {isa = PBXBuildFile; fileRef = 864C4845177BE9C7005505EC /* IPWork.m */; };
 		864C4849177BEA26005505EC /* IPWorksCollection.m in Sources */ = {isa = PBXBuildFile; fileRef = 864C4848177BEA26005505EC /* IPWorksCollection.m */; };
+		866339EB17948CA900C409C4 /* IPLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 866339EA17948CA900C409C4 /* IPLabel.m */; };
 		86AB4904177D35F800AC46AC /* IPAuthorsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 86AB4903177D35F800AC46AC /* IPAuthorsViewController.m */; };
 		86B9BD21177BF0DB00DF4B4A /* IPEditViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 86B9BD20177BF0DB00DF4B4A /* IPEditViewController.m */; };
 		86E052D6178354360086017F /* IPWorkOptionsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 86E052D5178354360086017F /* IPWorkOptionsViewController.m */; };
@@ -65,6 +66,8 @@
 		864C4847177BEA26005505EC /* IPWorksCollection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IPWorksCollection.h; sourceTree = "<group>"; };
 		864C4848177BEA26005505EC /* IPWorksCollection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IPWorksCollection.m; sourceTree = "<group>"; };
 		864C484A177BEABE005505EC /* Macros.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Macros.h; sourceTree = "<group>"; };
+		866339E917948CA900C409C4 /* IPLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IPLabel.h; sourceTree = "<group>"; };
+		866339EA17948CA900C409C4 /* IPLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IPLabel.m; sourceTree = "<group>"; };
 		86AB4902177D35F800AC46AC /* IPAuthorsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IPAuthorsViewController.h; sourceTree = "<group>"; };
 		86AB4903177D35F800AC46AC /* IPAuthorsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IPAuthorsViewController.m; sourceTree = "<group>"; };
 		86B9BD1F177BF0DB00DF4B4A /* IPEditViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IPEditViewController.h; sourceTree = "<group>"; };
@@ -201,6 +204,8 @@
 				86E052DB178367F00086017F /* IPButtonCell.m */,
 				86E052ED17836E230086017F /* IPButton.h */,
 				86E052EE17836E230086017F /* IPButton.m */,
+				866339E917948CA900C409C4 /* IPLabel.h */,
+				866339EA17948CA900C409C4 /* IPLabel.m */,
 				86E052EA17836DB00086017F /* IPGraphics.h */,
 				86E052EB17836DB00086017F /* IPGraphics.m */,
 				86E052F91783A5BF0086017F /* IPMoreViewController.h */,
@@ -313,6 +318,7 @@
 				86E052EF17836E230086017F /* IPButton.m in Sources */,
 				86E052F217837C340086017F /* IPFlowLayout.m in Sources */,
 				86E052FB1783A5BF0086017F /* IPMoreViewController.m in Sources */,
+				866339EB17948CA900C409C4 /* IPLabel.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
