@@ -355,7 +355,7 @@
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="RXV-0z-jkj">
-                                        <color key="backgroundColor" red="0.7967279027196652" green="0.7967279027196652" blue="0.7967279027196652" alpha="1" colorSpace="calibratedRGB"/>
+                                        <color key="backgroundColor" white="0.29912750912408759" alpha="1" colorSpace="calibratedWhite"/>
                                         <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
                                         <state key="normal">
                                             <color key="titleColor" red="0.19607843459999999" green="0.30980393290000002" blue="0.52156865600000002" alpha="1" colorSpace="calibratedRGB"/>
@@ -722,6 +722,8 @@
         <class className="IPAuthorsViewController" superclassName="UIViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/IPAuthorsViewController.h"/>
             <relationships>
+                <relationship kind="action" name="newAuthor:"/>
+                <relationship kind="action" name="off:"/>
                 <relationship kind="outlet" name="collectionViewAuthors" candidateClass="UICollectionView"/>
             </relationships>
         </class>
@@ -760,6 +762,8 @@
         <class className="IPViewController" superclassName="UIViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/IPViewController.h"/>
             <relationships>
+                <relationship kind="action" name="instaPoet:"/>
+                <relationship kind="action" name="new:"/>
                 <relationship kind="outlet" name="buttonInstapoet" candidateClass="IPButton"/>
                 <relationship kind="outlet" name="buttonNew" candidateClass="IPButton"/>
                 <relationship kind="outlet" name="collectionViewWorks" candidateClass="UICollectionView"/>
@@ -768,6 +772,9 @@
         <class className="IPWorkOptionsViewController" superclassName="UIViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/IPWorkOptionsViewController.h"/>
             <relationships>
+                <relationship kind="action" name="delete:"/>
+                <relationship kind="action" name="done:"/>
+                <relationship kind="action" name="share:"/>
                 <relationship kind="outlet" name="labelInfo" candidateClass="UILabel"/>
                 <relationship kind="outlet" name="textViewWork" candidateClass="UITextView"/>
             </relationships>
@@ -783,6 +790,9 @@
         </class>
         <class className="UICollectionViewFlowLayout" superclassName="UICollectionViewLayout">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/UICollectionViewFlowLayout.h"/>
+        </class>
+        <class className="UICollectionViewLayout" superclassName="NSObject">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/UICollectionViewLayout.h"/>
         </class>
     </classes>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
