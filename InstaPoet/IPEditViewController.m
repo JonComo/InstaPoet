@@ -242,7 +242,9 @@
 {
     MVPhrase *phrase = phrasesSuggested[indexPath.row];
     
-    textViewMain.text = [NSString stringWithFormat:@"%@%@", textViewMain.text, phrase.text];
+    textViewMain.text = [NSString stringWithFormat:@"%@%@ ", textViewMain.text, phrase.text];
+    
+    [self suggestWords];
 }
 
 -(CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath
