@@ -7,9 +7,13 @@
 //
 
 #import "IPMoreViewController.h"
+#import "IPButton.h"
 #import "IPGraphics.h"
 
 @interface IPMoreViewController ()
+{
+    __weak IBOutlet IPButton *buttonMoreApps;
+}
 
 @end
 
@@ -19,6 +23,8 @@
 {
     [super viewDidLoad];
 	// Do any additional setup after loading the view.
+    
+    [buttonMoreApps addTarget:self action:@selector(moreApps) forControlEvents:UIControlEventTouchUpInside];
 }
 
 - (void)didReceiveMemoryWarning
@@ -37,6 +43,13 @@
     [IPGraphics setInterfaceColor:sender.backgroundColor];
 }
 
+<<<<<<< HEAD
 
+=======
+-(void)moreApps
+{
+    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"https://itunes.apple.com/us/artist/jon-como/id529966968"]];
+}
+>>>>>>> 270d490bce7e64843c54b7c19d3dcd558e3bf69a
 
 @end

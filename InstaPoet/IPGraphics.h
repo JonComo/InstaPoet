@@ -14,6 +14,7 @@
 @interface IPGraphics : NSObject
 
 +(void)button:(UIButton *)button;
++(void)label:(UILabel *)label;
 +(UIColor *)interfaceColor;
 +(void)setInterfaceColor:(UIColor *)color;
 

@@ -22,20 +22,18 @@
 		864C4842177BE553005505EC /* MVPhrase.m in Sources */ = {isa = PBXBuildFile; fileRef = 864C483F177BE553005505EC /* MVPhrase.m */; };
 		864C4846177BE9C7005505EC /* IPWork.m in Sources */ = {isa = PBXBuildFile; fileRef = 864C4845177BE9C7005505EC /* IPWork.m */; };
 		864C4849177BEA26005505EC /* IPWorksCollection.m in Sources */ = {isa = PBXBuildFile; fileRef = 864C4848177BEA26005505EC /* IPWorksCollection.m */; };
+		866339EB17948CA900C409C4 /* IPLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 866339EA17948CA900C409C4 /* IPLabel.m */; };
 		86AB4904177D35F800AC46AC /* IPAuthorsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 86AB4903177D35F800AC46AC /* IPAuthorsViewController.m */; };
 		86B9BD21177BF0DB00DF4B4A /* IPEditViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 86B9BD20177BF0DB00DF4B4A /* IPEditViewController.m */; };
+		86BB8009179F4B090027141C /* icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 86BB8008179F4B090027141C /* icon.png */; };
 		86E052D6178354360086017F /* IPWorkOptionsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 86E052D5178354360086017F /* IPWorkOptionsViewController.m */; };
 		86E052D91783636E0086017F /* MBProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = 86E052D81783636E0086017F /* MBProgressHUD.m */; };
 		86E052DC178367F00086017F /* IPButtonCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 86E052DB178367F00086017F /* IPButtonCell.m */; };
-		86E052DE17836D1D0086017F /* icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 86E052DD17836D1D0086017F /* icon@2x.png */; };
 		86E052E517836D280086017F /* icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 86E052E117836D280086017F /* icon@2x.png */; };
-		86E052E917836D640086017F /* icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 86E052E817836D640086017F /* icon.png */; };
 		86E052EC17836DB00086017F /* IPGraphics.m in Sources */ = {isa = PBXBuildFile; fileRef = 86E052EB17836DB00086017F /* IPGraphics.m */; };
 		86E052EF17836E230086017F /* IPButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 86E052EE17836E230086017F /* IPButton.m */; };
 		86E052F217837C340086017F /* IPFlowLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 86E052F117837C340086017F /* IPFlowLayout.m */; };
 		86E052F417837E480086017F /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 86E052F317837E480086017F /* QuartzCore.framework */; };
-		86E052F61783A3610086017F /* icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 86E052F51783A3610086017F /* icon@2x.png */; };
-		86E052F81783A3770086017F /* icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 86E052F71783A3770086017F /* icon.png */; };
 		86E052FB1783A5BF0086017F /* IPMoreViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 86E052FA1783A5BF0086017F /* IPMoreViewController.m */; };
 /* End PBXBuildFile section */
 
@@ -65,19 +63,20 @@
 		864C4847177BEA26005505EC /* IPWorksCollection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IPWorksCollection.h; sourceTree = "<group>"; };
 		864C4848177BEA26005505EC /* IPWorksCollection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IPWorksCollection.m; sourceTree = "<group>"; };
 		864C484A177BEABE005505EC /* Macros.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Macros.h; sourceTree = "<group>"; };
+		866339E917948CA900C409C4 /* IPLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IPLabel.h; sourceTree = "<group>"; };
+		866339EA17948CA900C409C4 /* IPLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IPLabel.m; sourceTree = "<group>"; };
 		86AB4902177D35F800AC46AC /* IPAuthorsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IPAuthorsViewController.h; sourceTree = "<group>"; };
 		86AB4903177D35F800AC46AC /* IPAuthorsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IPAuthorsViewController.m; sourceTree = "<group>"; };
 		86B9BD1F177BF0DB00DF4B4A /* IPEditViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IPEditViewController.h; sourceTree = "<group>"; };
 		86B9BD20177BF0DB00DF4B4A /* IPEditViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IPEditViewController.m; sourceTree = "<group>"; };
+		86BB8008179F4B090027141C /* icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon.png; sourceTree = "<group>"; };
 		86E052D4178354360086017F /* IPWorkOptionsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IPWorkOptionsViewController.h; sourceTree = "<group>"; };
 		86E052D5178354360086017F /* IPWorkOptionsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IPWorkOptionsViewController.m; sourceTree = "<group>"; };
 		86E052D71783636E0086017F /* MBProgressHUD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MBProgressHUD.h; sourceTree = "<group>"; };
 		86E052D81783636E0086017F /* MBProgressHUD.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MBProgressHUD.m; sourceTree = "<group>"; };
 		86E052DA178367F00086017F /* IPButtonCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IPButtonCell.h; sourceTree = "<group>"; };
 		86E052DB178367F00086017F /* IPButtonCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IPButtonCell.m; sourceTree = "<group>"; };
-		86E052DD17836D1D0086017F /* icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon@2x.png"; sourceTree = "<group>"; };
 		86E052E117836D280086017F /* icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon@2x.png"; sourceTree = "<group>"; };
-		86E052E817836D640086017F /* icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon.png; sourceTree = "<group>"; };
 		86E052EA17836DB00086017F /* IPGraphics.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IPGraphics.h; sourceTree = "<group>"; };
 		86E052EB17836DB00086017F /* IPGraphics.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IPGraphics.m; sourceTree = "<group>"; };
 		86E052ED17836E230086017F /* IPButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IPButton.h; sourceTree = "<group>"; };
@@ -85,8 +84,6 @@
 		86E052F017837C340086017F /* IPFlowLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IPFlowLayout.h; sourceTree = "<group>"; };
 		86E052F117837C340086017F /* IPFlowLayout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IPFlowLayout.m; sourceTree = "<group>"; };
 		86E052F317837E480086017F /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
-		86E052F51783A3610086017F /* icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon@2x.png"; sourceTree = "<group>"; };
-		86E052F71783A3770086017F /* icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon.png; sourceTree = "<group>"; };
 		86E052F91783A5BF0086017F /* IPMoreViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IPMoreViewController.h; sourceTree = "<group>"; };
 		86E052FA1783A5BF0086017F /* IPMoreViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IPMoreViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -109,10 +106,7 @@
 		864C480B177BE53E005505EC = {
 			isa = PBXGroup;
 			children = (
-				86E052F71783A3770086017F /* icon.png */,
-				86E052F51783A3610086017F /* icon@2x.png */,
-				86E052E817836D640086017F /* icon.png */,
-				86E052DD17836D1D0086017F /* icon@2x.png */,
+				86BB8008179F4B090027141C /* icon.png */,
 				864C481D177BE53E005505EC /* InstaPoet */,
 				864C4816177BE53E005505EC /* Frameworks */,
 				864C4815177BE53E005505EC /* Products */,
@@ -201,6 +195,8 @@
 				86E052DB178367F00086017F /* IPButtonCell.m */,
 				86E052ED17836E230086017F /* IPButton.h */,
 				86E052EE17836E230086017F /* IPButton.m */,
+				866339E917948CA900C409C4 /* IPLabel.h */,
+				866339EA17948CA900C409C4 /* IPLabel.m */,
 				86E052EA17836DB00086017F /* IPGraphics.h */,
 				86E052EB17836DB00086017F /* IPGraphics.m */,
 				86E052F91783A5BF0086017F /* IPMoreViewController.h */,
@@ -282,11 +278,8 @@
 				864C482C177BE53E005505EC /* Default@2x.png in Resources */,
 				864C482E177BE53E005505EC /* Default-568h@2x.png in Resources */,
 				864C4831177BE53E005505EC /* MainStoryboard.storyboard in Resources */,
-				86E052DE17836D1D0086017F /* icon@2x.png in Resources */,
 				86E052E517836D280086017F /* icon@2x.png in Resources */,
-				86E052E917836D640086017F /* icon.png in Resources */,
-				86E052F61783A3610086017F /* icon@2x.png in Resources */,
-				86E052F81783A3770086017F /* icon.png in Resources */,
+				86BB8009179F4B090027141C /* icon.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -313,6 +306,7 @@
 				86E052EF17836E230086017F /* IPButton.m in Sources */,
 				86E052F217837C340086017F /* IPFlowLayout.m in Sources */,
 				86E052FB1783A5BF0086017F /* IPMoreViewController.m in Sources */,
+				866339EB17948CA900C409C4 /* IPLabel.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

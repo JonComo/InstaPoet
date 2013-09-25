@@ -11,6 +11,7 @@
 #import "IPWorkOptionsViewController.h"
 #import "MVMarkov.h"
 #import "MVPhrase.h"
+#import "IPLabel.h"
 #import "IPWork.h"
 
 @interface IPEditViewController () <UITextViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout>
@@ -71,13 +72,6 @@
     if (self.work.text.length == 0){
         [textViewMain becomeFirstResponder];
     }
-}
-
--(void)viewWillDisappear:(BOOL)animated
-{
-    [super viewWillDisappear:animated];
-    
-    [self saveWork];
 }
 
 -(void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
@@ -160,6 +154,8 @@
 
 - (IBAction)done:(id)sender
 {
+    [self saveWork];
+    
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
@@ -230,7 +226,7 @@
     
     MVPhrase *phrase = phrasesSuggested[indexPath.row];
     
-    UILabel *label = (UILabel *)[cell viewWithTag:100];
+    IPLabel *label = (IPLabel *)[cell viewWithTag:100];
     
     label.text = phrase.text;
     
@@ -246,7 +242,9 @@
 {
     MVPhrase *phrase = phrasesSuggested[indexPath.row];
     
-    textViewMain.text = [NSString stringWithFormat:@"%@%@", textViewMain.text, phrase.text];
+    textViewMain.text = [NSString stringWithFormat:@"%@%@ ", textViewMain.text, phrase.text];
+    
+    [self suggestWords];
 }
 
 -(CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath
@@ -255,7 +253,7 @@
     
     CGSize wordSize = [phrase.text sizeWithFont:[UIFont fontWithName:@"Helvetica" size:17]];
     
-    return CGSizeMake(wordSize.width + 20, 40);
+    return CGSizeMake(wordSize.width + 30, 40);
 }
 
 @end

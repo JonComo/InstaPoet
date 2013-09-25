@@ -39,4 +39,9 @@
     [[NSNotificationCenter defaultCenter] postNotificationName:IPNotificationColorChanged object:nil];
 }
 
++(void)label:(UILabel *)label
+{
+    [label setTextColor:[IPGraphics interfaceColor]];
+}
+
 @end
