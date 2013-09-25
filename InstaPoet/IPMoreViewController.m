@@ -43,13 +43,9 @@
     [IPGraphics setInterfaceColor:sender.backgroundColor];
 }
 
-<<<<<<< HEAD
-
-=======
 -(void)moreApps
 {
     [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"https://itunes.apple.com/us/artist/jon-como/id529966968"]];
 }
->>>>>>> 270d490bce7e64843c54b7c19d3dcd558e3bf69a
 
 @end
