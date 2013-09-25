@@ -9,6 +9,8 @@
 #import "IPWorkOptionsViewController.h"
 #import "IPWork.h"
 
+@import AVFoundation;
+
 @interface IPWorkOptionsViewController ()
 {
     __weak IBOutlet UILabel *labelInfo;
@@ -61,6 +63,18 @@
     UIActivityViewController *activityController = [[UIActivityViewController alloc] initWithActivityItems:@[poemHashed] applicationActivities:nil];
     
     [self presentViewController:activityController animated:YES completion:nil];
+}
+
+- (IBAction)speak:(id)sender
+{
+    AVSpeechUtterance *utterance = [AVSpeechUtterance speechUtteranceWithString:self.work.text];
+    
+    utterance.rate = 0.2;
+    utterance.pitchMultiplier = 1.2;
+    
+    AVSpeechSynthesizer *speach = [[AVSpeechSynthesizer alloc] init];
+    
+    [speach speakUtterance:utterance];
 }
 
 @end
