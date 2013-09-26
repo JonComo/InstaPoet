@@ -13,12 +13,13 @@
 
 @implementation IPWork
 
--(id)initWithType:(kWorkType)type
+-(id)initWithType:(kWorkType)type name:(NSString *)name
 {
     if (self = [super init]) {
         //init
         _dateCreated = [NSDate date];
         _type = type;
+        _name = name;
         
         NSDateFormatter *formatter = [NSDateFormatter new];
         [formatter setDateFormat:@"MMddyyyyhhmmssSSSS"];
@@ -36,6 +37,8 @@
         [[IPWorksCollection sharedCollection] createDirectoryAtURL:_url];
         
         _url = [_url URLByAppendingPathComponent:[NSString stringWithFormat:@"%@_%@.txt", identifier, [formatter stringFromDate:self.dateCreated]]];
+        
+        [self save];
     }
     
     return self;
@@ -75,6 +78,8 @@
     }
     
     [NSKeyedArchiver archiveRootObject:self toFile:[self.url path]];
+    
+    //[[NSUserDefaults standardUserDefaults] setObject:@{@"name": self.name, @"sample" : @"This is the sample of the work", @"URL" : _url} forKey:[_url path]];
     
     return error ? NO : YES;
 }

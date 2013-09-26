@@ -33,9 +33,17 @@
 
 -(void)loadLocalAuthorsCompletion:(void (^)(NSArray *))block
 {
-    NSString *authorsDirectory = [NSString stringWithFormat:@"%@/authors", DOCUMENTS];
+    NSMutableArray *authors = [NSMutableArray array];
     
-    [self filesInDirectory:authorsDirectory completion:block];
+    //User created
+    NSString *userAuthorsDirectory = [NSString stringWithFormat:@"%@/authors", DOCUMENTS];
+    //NSArray *archivedAuthors = [[NSBundle mainBundle] pathsForResourcesOfType:@"author" inDirectory:nil];
+    
+    [self filesInDirectory:userAuthorsDirectory completion:^(NSArray *results) {
+        [authors addObjectsFromArray:results];
+        
+        if(block) block(authors);
+    }];
 }
 
 -(void)filesInDirectory:(NSString *)directory completion:(void(^)(NSArray *results))block

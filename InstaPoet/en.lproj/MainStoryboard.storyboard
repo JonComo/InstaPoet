@@ -585,7 +585,7 @@
                                     <action selector="share:" destination="8jL-kM-BFO" eventType="touchUpInside" id="cRe-05-vok"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7TX-lH-v0Q" customClass="IPButton">
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7TX-lH-v0Q" customClass="IPButton">
                                 <rect key="frame" x="159" y="508" width="74" height="40"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="74" id="U18-A4-rDP"/>
@@ -608,6 +608,7 @@
                         <constraints>
                             <constraint firstItem="O1x-YH-6dZ" firstAttribute="top" secondItem="QAQ-zw-A9h" secondAttribute="bottom" constant="8" symbolic="YES" id="6dN-1j-Yif"/>
                             <constraint firstAttribute="bottom" secondItem="mBg-fG-HMg" secondAttribute="bottom" constant="20" symbolic="YES" id="8bf-mD-wV4"/>
+                            <constraint firstItem="7TX-lH-v0Q" firstAttribute="leading" secondItem="mBg-fG-HMg" secondAttribute="trailing" constant="8" symbolic="YES" id="9C9-bC-1Je"/>
                             <constraint firstAttribute="trailing" secondItem="hk5-II-Ski" secondAttribute="trailing" constant="20" symbolic="YES" id="BcB-Fl-Zmr"/>
                             <constraint firstItem="hk5-II-Ski" firstAttribute="top" secondItem="MHp-h4-GbK" secondAttribute="bottom" constant="8" symbolic="YES" id="EIK-ze-iTo"/>
                             <constraint firstItem="QAQ-zw-A9h" firstAttribute="leading" secondItem="wvC-gy-QsH" secondAttribute="leading" id="GCZ-cJ-37l"/>
@@ -618,6 +619,7 @@
                             <constraint firstItem="QAQ-zw-A9h" firstAttribute="top" secondItem="hk5-II-Ski" secondAttribute="bottom" constant="8" symbolic="YES" id="jxA-N9-xFu"/>
                             <constraint firstAttribute="bottom" secondItem="Exv-0J-zQX" secondAttribute="bottom" constant="20" symbolic="YES" id="lDO-el-BKk"/>
                             <constraint firstItem="hk5-II-Ski" firstAttribute="centerX" secondItem="MHp-h4-GbK" secondAttribute="centerX" id="mLo-3B-SFF"/>
+                            <constraint firstItem="7TX-lH-v0Q" firstAttribute="baseline" secondItem="mBg-fG-HMg" secondAttribute="baseline" id="qGr-ET-Vt4"/>
                             <constraint firstItem="QAQ-zw-A9h" firstAttribute="trailing" secondItem="wvC-gy-QsH" secondAttribute="trailing" id="rrz-Hm-95x"/>
                             <constraint firstAttribute="bottom" secondItem="O1x-YH-6dZ" secondAttribute="bottom" constant="20" symbolic="YES" id="sNU-Kk-vgH"/>
                             <constraint firstAttribute="centerX" secondItem="mBg-fG-HMg" secondAttribute="centerX" constant="48.5" id="syI-n5-F0y"/>

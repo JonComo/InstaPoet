@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		8600A1BD17F4A5F800D12F32 /* nerudaPablo.author in Resources */ = {isa = PBXBuildFile; fileRef = 8600A1BC17F4A5F800D12F32 /* nerudaPablo.author */; };
 		864C4818177BE53E005505EC /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 864C4817177BE53E005505EC /* UIKit.framework */; };
 		864C481A177BE53E005505EC /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 864C4819177BE53E005505EC /* Foundation.framework */; };
 		864C481C177BE53E005505EC /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 864C481B177BE53E005505EC /* CoreGraphics.framework */; };
@@ -38,6 +39,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		8600A1BC17F4A5F800D12F32 /* nerudaPablo.author */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = nerudaPablo.author; sourceTree = "<group>"; };
 		864C4814177BE53E005505EC /* InstaPoet.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = InstaPoet.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		864C4817177BE53E005505EC /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		864C4819177BE53E005505EC /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -103,6 +105,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		8600A1BB17F4A5F800D12F32 /* authors */ = {
+			isa = PBXGroup;
+			children = (
+				8600A1BC17F4A5F800D12F32 /* nerudaPablo.author */,
+			);
+			path = authors;
+			sourceTree = "<group>";
+		};
 		864C480B177BE53E005505EC = {
 			isa = PBXGroup;
 			children = (
@@ -135,6 +145,7 @@
 		864C481D177BE53E005505EC /* InstaPoet */ = {
 			isa = PBXGroup;
 			children = (
+				8600A1BB17F4A5F800D12F32 /* authors */,
 				86E052DF17836D280086017F /* media */,
 				86B9BD1E177BF0CE00DF4B4A /* View */,
 				864C4843177BE558005505EC /* Model */,
@@ -273,6 +284,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8600A1BD17F4A5F800D12F32 /* nerudaPablo.author in Resources */,
 				864C4822177BE53E005505EC /* InfoPlist.strings in Resources */,
 				864C482A177BE53E005505EC /* Default.png in Resources */,
 				864C482C177BE53E005505EC /* Default@2x.png in Resources */,

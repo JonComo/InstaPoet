@@ -69,12 +69,13 @@
 {
     AVSpeechUtterance *utterance = [AVSpeechUtterance speechUtteranceWithString:self.work.text];
     
-    utterance.rate = 0.2;
+    utterance.rate = 0.8;
     utterance.pitchMultiplier = 1.2;
     
     AVSpeechSynthesizer *speach = [[AVSpeechSynthesizer alloc] init];
     
     [speach speakUtterance:utterance];
+    
 }
 
 @end

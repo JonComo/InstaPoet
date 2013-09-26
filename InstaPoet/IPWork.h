@@ -20,13 +20,15 @@ typedef enum
 
 @property (nonatomic, strong) NSURL *authorWorkURL;
 @property (nonatomic, strong) NSString *text;
+@property (nonatomic, strong) NSString *name;
 @property (nonatomic, strong) NSURL *url;
 @property (nonatomic, strong) NSDate *dateCreated;
 @property kWorkType type;
 
 @property (nonatomic, strong) MVMarkov *model;
 
--(id)initWithType:(kWorkType)type;
+-(id)initWithType:(kWorkType)type name:(NSString *)name;
+
 -(void)loadModelCompletion:(void(^)(void))block;
 -(BOOL)save;
 -(BOOL)deleteWork;
