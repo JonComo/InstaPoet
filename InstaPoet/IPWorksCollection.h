@@ -8,12 +8,16 @@
 
 #import <Foundation/Foundation.h>
 
+#define WORKS @"works"
+
+@class IPWork;
+
 @interface IPWorksCollection : NSObject
 
 +(IPWorksCollection *)sharedCollection;
 
--(void)loadLocalWorksCompletion:(void(^)(NSArray *works))block;
--(void)loadLocalAuthorsCompletion:(void(^)(NSArray *authors))block;
--(void)createDirectoryAtURL:(NSURL *)url;
+-(NSArray *)localFilesOfType:(int)type;
+-(void)saveFile:(IPWork *)work;
+-(void)deleteFile:(IPWork *)file;
 
 @end

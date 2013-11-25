@@ -24,69 +24,84 @@
     return sharedCollection;
 }
 
--(void)loadLocalWorksCompletion:(void(^)(NSArray *works))block
+-(NSArray *)localFilesOfType:(int)type
 {
-    NSString *worksDirectory = [NSString stringWithFormat:@"%@/works", DOCUMENTS];
-    
-    [self filesInDirectory:worksDirectory completion:block];
-}
-
--(void)loadLocalAuthorsCompletion:(void (^)(NSArray *))block
-{
-    NSMutableArray *authors = [NSMutableArray array];
-    
-    //User created
-    NSString *userAuthorsDirectory = [NSString stringWithFormat:@"%@/authors", DOCUMENTS];
-    //NSArray *archivedAuthors = [[NSBundle mainBundle] pathsForResourcesOfType:@"author" inDirectory:nil];
-    
-    [self filesInDirectory:userAuthorsDirectory completion:^(NSArray *results) {
-        [authors addObjectsFromArray:results];
-        
-        if(block) block(authors);
-    }];
-}
-
--(void)filesInDirectory:(NSString *)directory completion:(void(^)(NSArray *results))block
-{
-    NSError *error;
-    NSArray *files = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:directory error:&error];
-    
-    if (error){
-        if (block) block(nil);
-        return;
-    }
+    NSArray *archivedWorks = [[NSUserDefaults standardUserDefaults] arrayForKey:WORKS];
     
     NSMutableArray *works = [NSMutableArray array];
     
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
-        for (NSString *fileName in files)
-        {
-            IPWork *work = [NSKeyedUnarchiver unarchiveObjectWithFile:[NSString stringWithFormat:@"%@/%@", directory, fileName]];
-            
-            if (work)
-                [works addObject:work];
-        }
-        
-        [works sortUsingComparator:^NSComparisonResult(id obj1, id obj2) {
-            IPWork *work1 = obj1;
-            IPWork *work2 = obj2;
-            
-            return [work1.dateCreated compare:work2.dateCreated];
-        }];
-        
-        dispatch_async(dispatch_get_main_queue(), ^{
-            if (block) block(works);
-        });
-    });
+    for (NSData *archivedWork in archivedWorks)
+    {
+        IPWork *work = [NSKeyedUnarchiver unarchiveObjectWithData:archivedWork];
+        if (work.type == type) [works addObject:work];
+    }
+    
+    return works;
 }
 
--(void)createDirectoryAtURL:(NSURL *)url
++(NSURL *)uniqueURL
 {
-    if (![[NSFileManager defaultManager] fileExistsAtPath:[url path] isDirectory:nil]){
-        NSError *error;
-        [[NSFileManager defaultManager] createDirectoryAtPath:[url path] withIntermediateDirectories:NO attributes:nil error:&error];
-        if (error) NSLog(@"%@", error);
+    NSString *documents = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)[0];
+    
+    int count = 0;
+    
+    NSURL *URL;
+    
+    do {
+        URL = [NSURL URLWithString:[NSString stringWithFormat:@"%@/%i", documents, count]];
+        count ++;
+    } while ([[NSFileManager defaultManager] fileExistsAtPath:[URL path]]);
+    
+    return URL;
+}
+
+-(void)saveFile:(IPWork *)work
+{
+    NSMutableArray *localFiles = [[[IPWorksCollection sharedCollection] localFilesOfType:work.type] mutableCopy];
+    
+    BOOL existingWork = NO;
+    for (IPWork *localWork in localFiles){
+        if ([work.dateCreated isEqualToDate:localWork.dateCreated]){
+            existingWork = YES;
+        }
     }
+    
+    [NSKeyedArchiver archiveRootObject:work.text toFile:[work.textURL path]];
+    if (work.model) [NSKeyedArchiver archiveRootObject:work.model toFile:[work.modelURL path]];
+    
+    if (!existingWork) [localFiles addObject:work];
+    
+    [self archiveWorks:localFiles];
+}
+
+-(void)deleteFile:(IPWork *)work
+{
+    NSMutableArray *localFiles = [[[IPWorksCollection sharedCollection] localFilesOfType:work.type] mutableCopy];
+    
+    for (int i = 0; i<localFiles.count; i++)
+    {
+        IPWork *localWork = localFiles[i];
+        
+        if ([work.dateCreated isEqualToDate:localWork.dateCreated]){
+            //Found it!
+            [localFiles removeObjectAtIndex:i];
+        }
+    }
+    
+    [self archiveWorks:localFiles];
+}
+
+-(void)archiveWorks:(NSMutableArray *)works
+{
+    NSMutableArray *archivedFiles = [NSMutableArray array];
+    for (IPWork *localWork in works)
+    {
+        NSData *archived = [NSKeyedArchiver archivedDataWithRootObject:localWork];
+        [archivedFiles addObject:archived];
+    }
+    
+    [[NSUserDefaults standardUserDefaults] setObject:archivedFiles forKey:WORKS];
+    [[NSUserDefaults standardUserDefaults] synchronize];
 }
 
 @end

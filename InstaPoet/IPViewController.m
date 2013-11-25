@@ -14,6 +14,8 @@
 #import "MBProgressHUD.h"
 #import "IPWork.h"
 
+#import "IPWorksCollection.h"
+
 #import <QuartzCore/QuartzCore.h>
 
 @interface IPViewController () <UICollectionViewDataSource, UICollectionViewDelegateFlowLayout>
@@ -35,14 +37,13 @@
     [super viewDidLoad];
 	// Do any additional setup after loading the view, typically from a nib.
     
-    [self loadWorksShowProgress:YES];
 }
 
 -(void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
     
-    [self loadWorksShowProgress:NO];
+    [self loadWorks];
 }
 
 - (CAAnimation*)getShakeAnimation
@@ -88,43 +89,36 @@
     // Dispose of any resources that can be recreated.
 }
 
--(void)loadWorksShowProgress:(BOOL)show
+-(void)loadWorks
 {
-    if (show)
-    {
-        MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:NO];
-        [hud setMode:MBProgressHUDModeIndeterminate];
-        hud.labelText = @"Loading Works";
-    }
+    localWorks = [[[IPWorksCollection sharedCollection] localFilesOfType:IPWorkTypeUser] mutableCopy];
+    [collectionViewWorks reloadData];
     
-    [[IPWorksCollection sharedCollection] loadLocalWorksCompletion:^(NSArray *works) {
-        if (show) [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
-        localWorks = [works mutableCopy];
-        [collectionViewWorks reloadData];
-        
-        if (works.count == 0){
-            [buttonNew.layer addAnimation:[self getShakeAnimation] forKey:@"wiggle"];
-        }
-    }];
+    if (localWorks.count == 0){
+        [buttonNew.layer addAnimation:[self getShakeAnimation] forKey:@"wiggle"];
+    }
 }
 
 - (IBAction)new:(id)sender
 {
     [buttonNew.layer removeAllAnimations];
     
-    IPWork *newWork = [[IPWork alloc] initWithType:kWorkTypeUser];
+    IPWork *newWork = [[IPWork alloc] initWithType:IPWorkTypeUser name:@"Unnamed" text:@"Sample text"];
     
     [self presentEditorWithWork:newWork];
 }
 
 -(void)presentEditorWithWork:(IPWork *)work
 {
-    IPEditViewController *editVC = [self.storyboard instantiateViewControllerWithIdentifier:@"editVC"];
-    
-    editVC.work = work;
-    
-    editVC.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
-    [self presentViewController:editVC animated:YES completion:nil];
+    [work loadFromDiskCompletion:^{
+        IPEditViewController *editVC = [self.storyboard instantiateViewControllerWithIdentifier:@"editVC"];
+        
+        editVC.work = work;
+        
+        editVC.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
+        
+        [self presentViewController:editVC animated:YES completion:nil];
+    }];
 }
 
 -(NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
@@ -140,7 +134,7 @@
     
     UITextView *textView = (UITextView *)[cell viewWithTag:100];
     
-    NSString *subString = [work.text substringToIndex:MIN(work.text.length, 200)];
+    NSString *subString = work.summary;
     
     textView.text = subString;
     
@@ -167,7 +161,7 @@
         newWidth = self.view.frame.size.height;
     }
     
-    NSString *subString = [work.text substringToIndex:MIN(work.text.length, 200)];
+    NSString *subString = work.summary;
     
     CGSize workSize = [subString sizeWithFont:[UIFont systemFontOfSize:14] constrainedToSize:CGSizeMake(newWidth, 220)];
     

@@ -36,22 +36,14 @@
 {
     [super viewWillAppear:animated];
     
-    MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
-    [hud setMode:MBProgressHUDModeIndeterminate];
-    hud.labelText = @"Loading Inspiration";
-    
-    [[IPWorksCollection sharedCollection] loadLocalAuthorsCompletion:^(NSArray *authors) {
-        [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
-        localAuthors = [authors mutableCopy];
-        [collectionViewAuthors reloadData];
-    }];
+    localAuthors = [[[IPWorksCollection sharedCollection] localFilesOfType:IPWorkTypeUser] mutableCopy];
+    [collectionViewAuthors reloadData];
 }
 
 -(void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
 {
     isRotating = YES;
     [collectionViewAuthors.collectionViewLayout invalidateLayout];
-    //[collectionViewWorks reloadData];
 }
 
 -(void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation
@@ -73,7 +65,7 @@
 
 - (IBAction)newAuthor:(id)sender
 {
-    IPWork *newAuthor = [[IPWork alloc] initWithType:kWorkTypeAuthor];
+    IPWork *newAuthor = [[IPWork alloc] initWithType:IPWorkTypeInspiration name:@"Author Name" text:@"Sample author text"];
     
     [self presentEditorWithWork:newAuthor];
 }
@@ -87,11 +79,14 @@
 
 -(void)presentEditorWithWork:(IPWork *)work
 {
-    IPEditViewController *editVC = [self.storyboard instantiateViewControllerWithIdentifier:@"editVC"];
-    
-    editVC.work = work;
-    
-    [self presentViewController:editVC animated:YES completion:nil];
+    [work loadFromDiskCompletion:^{
+        
+        IPEditViewController *editVC = [self.storyboard instantiateViewControllerWithIdentifier:@"editVC"];
+        
+        editVC.work = work;
+        
+        [self presentViewController:editVC animated:YES completion:nil];
+    }];
 }
 
 -(UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
@@ -103,15 +98,13 @@
     IPButtonCell *editButton = (IPButtonCell *)[cell viewWithTag:200];
     editButton.indexPath = indexPath;
     
-    if (editButton.allTargets.count == 0)
-    {
+    if (editButton.allTargets.count == 0){
         [editButton addTarget:self action:@selector(editAuthor:) forControlEvents:UIControlEventTouchUpInside];
     }
     
     UITextView *textView = (UITextView *)[cell viewWithTag:100];
     
-    NSString *subText = [author.text substringToIndex:MIN(author.text.length, 200)];
-    textView.text = subText;
+    textView.text = author.text;
     
     UIView *divider = [cell viewWithTag:300];
     divider.alpha = (indexPath.row == localAuthors.count-1) ? 0 : 1;
@@ -126,18 +119,21 @@
 
 -(void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    IPWork *author = localAuthors[indexPath.row];
-    
-    self.workUser.authorWorkURL = author.url;
-    
     MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
     [hud setMode:MBProgressHUDModeIndeterminate];
     hud.labelText = @"Generating Model";
     
-    [self.workUser loadModelCompletion:^{
-        [MBProgressHUD hideAllHUDsForView:self.view animated:NO];
+    IPWork *author = localAuthors[indexPath.row];
+    
+    [author loadFromDiskCompletion:^{
         
-        [self dismissViewControllerAnimated:YES completion:nil];
+        MVMarkov *model = [MVMarkov new];
+        [model generateModelWithString:author.text completion:^{
+            
+            self.workUser.model = model;
+            
+            [self dismissViewControllerAnimated:YES completion:nil];
+        }];
     }];
 }
 
@@ -152,11 +148,7 @@
         newWidth = self.view.frame.size.height;
     }
     
-    NSString *subText = [author.text substringToIndex:MIN(author.text.length, 200)];
-    
-    CGSize workSize = [subText sizeWithFont:[UIFont systemFontOfSize:14] constrainedToSize:CGSizeMake(newWidth, 110)];
-    
-    return CGSizeMake(newWidth, workSize.height + 20);
+    return CGSizeMake(newWidth, 80);
 }
 
 @end

@@ -14,6 +14,8 @@
 #import "IPLabel.h"
 #import "IPWork.h"
 
+#import "IPWorksCollection.h"
+
 @interface IPEditViewController () <UITextViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout>
 {
     __weak IBOutlet UITextView *textViewMain;
@@ -38,19 +40,6 @@
 	// Do any additional setup after loading the view.
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillChangeFrame:) name:UIKeyboardWillChangeFrameNotification object:nil];
-    
-    if (!self.work.model)
-    {
-        [self.work loadModelCompletion:^{
-            [self showInspiration];
-        }];
-    }
-    
-    if (self.work.type == kWorkTypeAuthor)
-    {
-        buttonInspiration.alpha = 0;
-        buttonInspiration.enabled = NO;
-    }
     
     textViewMain.text = self.work.text;
     
@@ -146,9 +135,9 @@
     if (textViewMain.text.length > 0)
     {
         self.work.text = textViewMain.text;
-        [self.work save];
+        [[IPWorksCollection sharedCollection] saveFile:self.work];
     }else{
-        [self.work deleteWork];
+        //delete
     }
 }
 
@@ -251,7 +240,7 @@
 {
     MVPhrase *phrase = phrasesSuggested[indexPath.row];
     
-    CGSize wordSize = [phrase.text sizeWithFont:[UIFont fontWithName:@"Helvetica" size:17]];
+    CGSize wordSize = [phrase.text sizeWithAttributes:@{NSFontAttributeName: [UIFont fontWithName:@"Helvetica" size:17]}];
     
     return CGSizeMake(wordSize.width + 30, 40);
 }

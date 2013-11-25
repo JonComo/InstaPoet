@@ -7,6 +7,7 @@
 //
 
 #import "IPWorkOptionsViewController.h"
+#import "IPWorksCollection.h"
 #import "IPWork.h"
 
 @import AVFoundation;
@@ -47,7 +48,7 @@
 
 - (IBAction)delete:(id)sender
 {
-    [self.work deleteWork];
+    [[IPWorksCollection sharedCollection] deleteFile:self.work];
     
     UIViewController *presenting = self.presentingViewController;
     

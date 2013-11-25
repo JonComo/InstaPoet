@@ -8,37 +8,23 @@
 
 #import "IPWork.h"
 #import "MVMarkov.h"
+#import "NSURL+Unique.h"
+
 #import "IPWorksCollection.h"
-#import "Macros.h"
 
 @implementation IPWork
 
--(id)initWithType:(kWorkType)type name:(NSString *)name
+-(id)initWithType:(IPWorkType)type name:(NSString *)name text:(NSString *)text
 {
     if (self = [super init]) {
         //init
         _dateCreated = [NSDate date];
         _type = type;
         _name = name;
+        _summary = [text substringToIndex:MIN(20, text.length)];
         
-        NSDateFormatter *formatter = [NSDateFormatter new];
-        [formatter setDateFormat:@"MMddyyyyhhmmssSSSS"];
-        
-        NSString *identifier;
-        
-        if (type == kWorkTypeAuthor){
-            identifier = @"author";
-        }else if (type == kWorkTypeUser){
-            identifier = @"work";
-        }
-        
-        _url = [NSURL URLWithString:[NSString stringWithFormat:@"%@/%@s/", DOCUMENTS, identifier]];
-        
-        [[IPWorksCollection sharedCollection] createDirectoryAtURL:_url];
-        
-        _url = [_url URLByAppendingPathComponent:[NSString stringWithFormat:@"%@_%@.txt", identifier, [formatter stringFromDate:self.dateCreated]]];
-        
-        [self save];
+        _textURL = [NSURL uniqueWithName:@"text"];
+        _modelURL = [NSURL uniqueWithName:@"model"];
     }
     
     return self;
@@ -48,11 +34,16 @@
 {
     if (self = [super init]) {
         //init
-        _text = [aDecoder decodeObjectForKey:@"text"];
-        _authorWorkURL = [aDecoder decodeObjectForKey:@"authorWorkURL"];
-        _url = [aDecoder decodeObjectForKey:@"url"];
+//        _text = [aDecoder decodeObjectForKey:@"text"];
+//        _authorWorkURL = [aDecoder decodeObjectForKey:@"authorWorkURL"];
+//        _url = [aDecoder decodeObjectForKey:@"url"];
+        _name = [aDecoder decodeObjectForKey:@"name"];
         _dateCreated = [aDecoder decodeObjectForKey:@"dateCreated"];
         _type = [aDecoder decodeIntForKey:@"type"];
+        _summary = [aDecoder decodeObjectForKey:@"summary"];
+        
+        _textURL = [aDecoder decodeObjectForKey:@"textURL"];
+        _modelURL = [aDecoder decodeObjectForKey:@"modelURL"];
     }
     
     return self;
@@ -60,46 +51,35 @@
 
 -(void)encodeWithCoder:(NSCoder *)aCoder
 {
-    [aCoder encodeObject:self.text forKey:@"text"];
-    [aCoder encodeObject:self.authorWorkURL forKey:@"authorWorkURL"];
-    [aCoder encodeObject:self.url forKey:@"url"];
+    //[aCoder encodeObject:self.url forKey:@"url"];
+    [aCoder encodeObject:self.name forKey:@"name"];
     [aCoder encodeObject:self.dateCreated forKey:@"dateCreated"];
     [aCoder encodeInt:self.type forKey:@"type"];
+    [aCoder encodeObject:self.summary forKey:@"summary"];
+    
+    [aCoder encodeObject:self.textURL forKey:@"textURL"];
+    [aCoder encodeObject:self.modelURL forKey:@"modelURL"];
 }
 
--(BOOL)save
+-(void)setText:(NSString *)text
 {
-    NSError *error;
+    _text = text;
     
-    if (self.url){
-        if ([[NSFileManager defaultManager] fileExistsAtPath:[self.url path]]){
-            [[NSFileManager defaultManager] removeItemAtURL:self.url error:&error];
-        }
-    }
-    
-    [NSKeyedArchiver archiveRootObject:self toFile:[self.url path]];
-    
-    //[[NSUserDefaults standardUserDefaults] setObject:@{@"name": self.name, @"sample" : @"This is the sample of the work", @"URL" : _url} forKey:[_url path]];
-    
-    return error ? NO : YES;
+    _summary = [text substringToIndex:MIN(20, text.length)];
 }
 
--(BOOL)deleteWork
+-(void)loadFromDiskCompletion:(void (^)(void))block
 {
-    NSError *error;
-    [[NSFileManager defaultManager] removeItemAtPath:[self.url path] error:&error];
+    //load markov model, sample text or work text, and anything else here
     
-    return error ? NO : YES;
-}
-
--(void)loadModelCompletion:(void(^)(void))block
-{
-    if (self.authorWorkURL){
-        IPWork *authorWork = [NSKeyedUnarchiver unarchiveObjectWithFile:[self.authorWorkURL path]];
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
+        _text = [NSKeyedUnarchiver unarchiveObjectWithFile:[self.textURL path]];
+        _model = [NSKeyedUnarchiver unarchiveObjectWithFile:[self.modelURL path]];
         
-        self.model = [MVMarkov new];
-        [self.model generateModelWithString:authorWork.text completion:block];
-    }
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if (block) block();
+        });
+    });
 }
 
 @end

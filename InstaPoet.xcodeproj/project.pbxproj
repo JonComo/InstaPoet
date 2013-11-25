@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		8600A1BD17F4A5F800D12F32 /* nerudaPablo.author in Resources */ = {isa = PBXBuildFile; fileRef = 8600A1BC17F4A5F800D12F32 /* nerudaPablo.author */; };
+		861CB9101843BF5200E7CC9F /* NSURL+Unique.m in Sources */ = {isa = PBXBuildFile; fileRef = 861CB90F1843BF5200E7CC9F /* NSURL+Unique.m */; };
 		864C4818177BE53E005505EC /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 864C4817177BE53E005505EC /* UIKit.framework */; };
 		864C481A177BE53E005505EC /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 864C4819177BE53E005505EC /* Foundation.framework */; };
 		864C481C177BE53E005505EC /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 864C481B177BE53E005505EC /* CoreGraphics.framework */; };
@@ -40,6 +41,8 @@
 
 /* Begin PBXFileReference section */
 		8600A1BC17F4A5F800D12F32 /* nerudaPablo.author */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = nerudaPablo.author; sourceTree = "<group>"; };
+		861CB90E1843BF5200E7CC9F /* NSURL+Unique.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSURL+Unique.h"; sourceTree = "<group>"; };
+		861CB90F1843BF5200E7CC9F /* NSURL+Unique.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSURL+Unique.m"; sourceTree = "<group>"; };
 		864C4814177BE53E005505EC /* InstaPoet.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = InstaPoet.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		864C4817177BE53E005505EC /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		864C4819177BE53E005505EC /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -187,6 +190,8 @@
 				864C4848177BEA26005505EC /* IPWorksCollection.m */,
 				86E052F017837C340086017F /* IPFlowLayout.h */,
 				86E052F117837C340086017F /* IPFlowLayout.m */,
+				861CB90E1843BF5200E7CC9F /* NSURL+Unique.h */,
+				861CB90F1843BF5200E7CC9F /* NSURL+Unique.m */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -311,6 +316,7 @@
 				864C4849177BEA26005505EC /* IPWorksCollection.m in Sources */,
 				86B9BD21177BF0DB00DF4B4A /* IPEditViewController.m in Sources */,
 				86AB4904177D35F800AC46AC /* IPAuthorsViewController.m in Sources */,
+				861CB9101843BF5200E7CC9F /* NSURL+Unique.m in Sources */,
 				86E052D6178354360086017F /* IPWorkOptionsViewController.m in Sources */,
 				86E052D91783636E0086017F /* MBProgressHUD.m in Sources */,
 				86E052DC178367F00086017F /* IPButtonCell.m in Sources */,
