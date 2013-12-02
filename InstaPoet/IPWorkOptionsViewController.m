@@ -48,7 +48,7 @@
 
 - (IBAction)delete:(id)sender
 {
-    [[IPWorksCollection sharedCollection] deleteFile:self.work];
+    //[[IPWorksCollection sharedCollection] deleteFile:self.work];
     
     UIViewController *presenting = self.presentingViewController;
     

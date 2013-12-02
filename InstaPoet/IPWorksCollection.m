@@ -55,6 +55,7 @@
     return URL;
 }
 
+/*
 -(void)saveFile:(IPWork *)work
 {
     NSMutableArray *localFiles = [[[IPWorksCollection sharedCollection] localFilesOfType:work.type] mutableCopy];
@@ -102,6 +103,25 @@
     
     [[NSUserDefaults standardUserDefaults] setObject:archivedFiles forKey:WORKS];
     [[NSUserDefaults standardUserDefaults] synchronize];
+} */
+
+
+-(NSArray *)dirLocalFiles
+{
+    NSArray *localDirs = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:DOCUMENTS error:nil];
+    NSMutableArray *files = [NSMutableArray array];
+    
+    if (localDirs.count == 0) return nil;
+    
+    for (NSString *directoryName in localDirs)
+    {
+        NSString *path = [NSString stringWithFormat:@"%@/%@/work", DOCUMENTS, directoryName];
+        IPWork *work = [NSKeyedUnarchiver unarchiveObjectWithFile:path];
+        if (work)
+            [files addObject:work];
+    }
+    
+    return files;
 }
 
 @end

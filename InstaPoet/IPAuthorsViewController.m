@@ -36,7 +36,7 @@
 {
     [super viewWillAppear:animated];
     
-    localAuthors = [[[IPWorksCollection sharedCollection] localFilesOfType:IPWorkTypeUser] mutableCopy];
+    localAuthors = [[[IPWorksCollection sharedCollection] dirLocalFiles] mutableCopy];
     [collectionViewAuthors reloadData];
 }
 

@@ -135,7 +135,7 @@
     if (textViewMain.text.length > 0)
     {
         self.work.text = textViewMain.text;
-        [[IPWorksCollection sharedCollection] saveFile:self.work];
+        [self.work saveToDisk];
     }else{
         //delete
     }

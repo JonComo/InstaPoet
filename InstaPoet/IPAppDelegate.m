@@ -14,21 +14,6 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-    // Override point for customization after application launch.
-    
-    
-    
-    
-    NSDictionary *toArchive = @{@"author": @"Pablo Neruda", @"text" : @"My live is like a dream."};
-    
-    NSData *data = [NSJSONSerialization dataWithJSONObject:toArchive options:NSJSONWritingPrettyPrinted error:nil];
-    
-    [data writeToFile:[NSString stringWithFormat:@"%@/written", DOCUMENTS] atomically:YES];
-    
-    
-    
-    
-    
     
     return YES;
 }

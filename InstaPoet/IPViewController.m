@@ -91,7 +91,7 @@
 
 -(void)loadWorks
 {
-    localWorks = [[[IPWorksCollection sharedCollection] localFilesOfType:IPWorkTypeUser] mutableCopy];
+    localWorks = [[[IPWorksCollection sharedCollection] dirLocalFiles] mutableCopy];
     [collectionViewWorks reloadData];
     
     if (localWorks.count == 0){

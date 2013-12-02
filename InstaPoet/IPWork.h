@@ -21,11 +21,10 @@ typedef enum
 @property IPWorkType type;
 @property (nonatomic, strong) NSString *name;
 
+@property (nonatomic, strong) NSURL *url;
+
 @property (nonatomic, strong) NSString *text; //loaded from disk
 @property (nonatomic, strong) MVMarkov *model; //loaded from disk
-
-@property (nonatomic, strong) NSURL *textURL;
-@property (nonatomic, strong) NSURL *modelURL;
 
 @property (nonatomic, strong) NSString *summary;
 
@@ -34,5 +33,6 @@ typedef enum
 -(id)initWithType:(IPWorkType)type name:(NSString *)name text:(NSString *)text;
 
 -(void)loadFromDiskCompletion:(void(^)(void))block;
+-(void)saveToDisk;
 
 @end

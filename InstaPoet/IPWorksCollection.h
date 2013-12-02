@@ -16,8 +16,12 @@
 
 +(IPWorksCollection *)sharedCollection;
 
+/*
 -(NSArray *)localFilesOfType:(int)type;
 -(void)saveFile:(IPWork *)work;
 -(void)deleteFile:(IPWork *)file;
+ */
+
+-(NSArray *)dirLocalFiles;
 
 @end
