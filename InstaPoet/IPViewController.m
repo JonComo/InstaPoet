@@ -9,12 +9,9 @@
 #import "IPViewController.h"
 #import "IPMoreViewController.h"
 #import "IPEditViewController.h"
-#import "IPWorksCollection.h"
 #import "IPButton.h"
 #import "MBProgressHUD.h"
 #import "IPWork.h"
-
-#import "IPWorksCollection.h"
 
 #import <QuartzCore/QuartzCore.h>
 
@@ -91,7 +88,17 @@
 
 -(void)loadWorks
 {
-    localWorks = [[[IPWorksCollection sharedCollection] dirLocalFiles] mutableCopy];
+    localWorks = [NSMutableArray array];
+    [localWorks removeAllObjects];
+    
+    NSArray *allFiles = [IPWork localFiles];
+    
+    for (IPWork *work in allFiles){
+        if (work.type == IPWorkTypeUser){
+            [localWorks addObject:work];
+        }
+    }
+    
     [collectionViewWorks reloadData];
     
     if (localWorks.count == 0){

@@ -7,7 +7,6 @@
 //
 
 #import "IPWorkOptionsViewController.h"
-#import "IPWorksCollection.h"
 #import "IPWork.h"
 
 @import AVFoundation;

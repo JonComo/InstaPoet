@@ -14,8 +14,6 @@
 #import "IPLabel.h"
 #import "IPWork.h"
 
-#import "IPWorksCollection.h"
-
 @interface IPEditViewController () <UITextViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout>
 {
     __weak IBOutlet UITextView *textViewMain;
@@ -27,7 +25,13 @@
     __weak IBOutlet UIButton *buttonInspiration;
     
     __weak IBOutlet UICollectionView *collectionViewWords;
+    
+    NSArray *foundPhrases;
     NSArray *phrasesSuggested;
+    
+    NSString *textEntered;
+    
+    BOOL isBackspace;
 }
 
 @end
@@ -108,7 +112,7 @@
     
     [UIView animateWithDuration:animationDuration animations:^{
         
-        float statusHeight = [UIApplication sharedApplication].statusBarFrame.size.height;
+        float statusHeight = 0;
         float frameHeight = self.view.frame.size.height;
         
         float offset = (frameHeight + statusHeight - keyboardRect.origin.y);
@@ -143,6 +147,7 @@
 
 - (IBAction)done:(id)sender
 {
+    [textViewMain resignFirstResponder];
     [self saveWork];
     
     [self dismissViewControllerAnimated:YES completion:nil];
@@ -180,33 +185,87 @@
 
 -(BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text
 {
-    if ([text isEqualToString:@" "]){
-        [self suggestWords];
-    }
+    isBackspace = (text.length == 0);
     
     return YES;
 }
 
+-(void)textViewDidChange:(UITextView *)textView
+{
+    if (!isBackspace)
+        [self suggestWords];
+}
+
+-(void)filterWords
+{
+    //filter based on text entered
+    if (textEntered.length == 0 || !textEntered)
+    {
+        //none entered, just use all
+        phrasesSuggested = [foundPhrases copy];
+        [collectionViewWords reloadData];
+        return;
+    }
+    
+    NSMutableArray *matched = [NSMutableArray array];
+    
+    for (MVPhrase *phrase in phrasesSuggested)
+    {
+        if (![phrase.text rangeOfString:textEntered].location == NSNotFound)
+        {
+            //contains it
+            [matched addObject:phrase];
+        }
+    }
+    
+    phrasesSuggested = matched;
+    [collectionViewWords reloadData];
+}
+
 -(void)suggestWords
 {
+    if (textViewMain.text.length > 1)
+    {
+        NSString *periodTest = [textViewMain.text substringFromIndex:textViewMain.text.length-1];
+        
+        if ([periodTest isEqualToString:@"."])
+        {
+            //dont suggest any
+            [self showSuggestions:NO];
+            return;
+        }
+    }
+    
     [self.work.model suggestWordsForString:textViewMain.text completion:^(NSArray *words) {
-        phrasesSuggested = [words copy];
+        
+        foundPhrases = [words copy];
+        phrasesSuggested = [foundPhrases copy];
         [collectionViewWords reloadData];
         
-        float targetHeight = 40;
         if (words.count > 0)
-            targetHeight = 80;
-        
-        [UIView animateWithDuration:0.3 animations:^{
-            constraintControlsHeight.constant = targetHeight;
-            [self.view layoutSubviews];
-        }];
-        
-        if (textViewMain.contentSize.height > textViewMain.frame.size.height){
-            CGPoint offset = CGPointMake(0, textViewMain.contentSize.height - textViewMain.frame.size.height);
-            [textViewMain setContentOffset:offset animated:YES];
+        {
+            textEntered = @"";
+            [self showSuggestions:YES];
+            [collectionViewWords scrollToItemAtIndexPath:[NSIndexPath indexPathForItem:0 inSection:0] atScrollPosition:UICollectionViewScrollPositionTop animated:NO];
+        }else{
+            [self showSuggestions:NO];
         }
     }];
+}
+
+-(void)showSuggestions:(BOOL)show
+{
+    float targetHeight = show ? 120 : 40;
+    
+    [UIView animateWithDuration:0.3 animations:^{
+        constraintControlsHeight.constant = targetHeight;
+        [self.view layoutSubviews];
+    }];
+    
+    if (textViewMain.contentSize.height > textViewMain.frame.size.height){
+        CGPoint offset = CGPointMake(0, textViewMain.contentSize.height - textViewMain.frame.size.height);
+        [textViewMain setContentOffset:offset animated:YES];
+    }
 }
 
 -(UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
@@ -231,7 +290,9 @@
 {
     MVPhrase *phrase = phrasesSuggested[indexPath.row];
     
-    textViewMain.text = [NSString stringWithFormat:@"%@%@ ", textViewMain.text, phrase.text];
+    NSString *lastCharacter = [textViewMain.text substringFromIndex:textViewMain.text.length-1];
+    
+    textViewMain.text = [NSString stringWithFormat:@"%@%@%@", textViewMain.text, [lastCharacter isEqualToString:@" "] ? @"": @" ", phrase.text];
     
     [self suggestWords];
 }
@@ -240,9 +301,9 @@
 {
     MVPhrase *phrase = phrasesSuggested[indexPath.row];
     
-    CGSize wordSize = [phrase.text sizeWithAttributes:@{NSFontAttributeName: [UIFont fontWithName:@"Helvetica" size:17]}];
+    CGSize wordSize = [phrase.text sizeWithAttributes:@{NSFontAttributeName: [UIFont fontWithName:@"Helvetica" size:16]}];
     
-    return CGSizeMake(wordSize.width + 30, 40);
+    return CGSizeMake(wordSize.width + 10, 34);
 }
 
 @end

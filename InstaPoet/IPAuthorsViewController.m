@@ -8,7 +8,6 @@
 
 #import "IPAuthorsViewController.h"
 #import "IPEditViewController.h"
-#import "IPWorksCollection.h"
 #import "MBProgressHUD.h"
 #import "IPButtonCell.h"
 #import "MVMarkov.h"
@@ -36,7 +35,7 @@
 {
     [super viewWillAppear:animated];
     
-    localAuthors = [[[IPWorksCollection sharedCollection] dirLocalFiles] mutableCopy];
+    localAuthors = [[IPWork localFiles] mutableCopy];
     [collectionViewAuthors reloadData];
 }
 
@@ -65,7 +64,7 @@
 
 - (IBAction)newAuthor:(id)sender
 {
-    IPWork *newAuthor = [[IPWork alloc] initWithType:IPWorkTypeInspiration name:@"Author Name" text:@"Sample author text"];
+    IPWork *newAuthor = [[IPWork alloc] initWithType:IPWorkTypeInspiration name:@"Author Name" text:@"Paste author's sample work here."];
     
     [self presentEditorWithWork:newAuthor];
 }
@@ -102,9 +101,11 @@
         [editButton addTarget:self action:@selector(editAuthor:) forControlEvents:UIControlEventTouchUpInside];
     }
     
-    UITextView *textView = (UITextView *)[cell viewWithTag:100];
+    UILabel *authorName = (UILabel *)[cell viewWithTag:400];
+    authorName.text = author.name;
     
-    textView.text = author.text;
+    UITextView *textView = (UITextView *)[cell viewWithTag:100];
+    textView.text = author.summary;
     
     UIView *divider = [cell viewWithTag:300];
     divider.alpha = (indexPath.row == localAuthors.count-1) ? 0 : 1;

@@ -10,7 +10,7 @@
 #import "MVMarkov.h"
 #import "NSURL+Unique.h"
 
-#import "IPWorksCollection.h"
+#import "Macros.h"
 
 @implementation IPWork
 
@@ -24,7 +24,7 @@
         _name = name;
         _text = text;
         
-        _summary = [text substringToIndex:MIN(20, text.length)];
+        _summary = [text substringToIndex:MIN(200, text.length)];
         
         _url = [IPWork uniqueDirectoryWithName:@"work"];
     }
@@ -90,7 +90,7 @@
 {
     _text = text;
     
-    _summary = [text substringToIndex:MIN(20, text.length)];
+    _summary = [text substringToIndex:MIN(200, text.length)];
 }
 
 -(void)loadFromDiskCompletion:(void (^)(void))block
@@ -117,6 +117,42 @@
     
     [NSKeyedArchiver archiveRootObject:self toFile:workPath];
     [NSKeyedArchiver archiveRootObject:self.text toFile:textPath];
+}
+
++(NSArray *)localFiles
+{
+    NSArray *localDirs = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:DOCUMENTS error:nil];
+    NSMutableArray *files = [NSMutableArray array];
+    
+    if (localDirs.count == 0) return nil;
+    
+    for (NSString *directoryName in localDirs)
+    {
+        NSString *path = [NSString stringWithFormat:@"%@/%@/work", DOCUMENTS, directoryName];
+        IPWork *work = [NSKeyedUnarchiver unarchiveObjectWithFile:path];
+        if (work)
+            [files addObject:work];
+    }
+    
+    return files;
+}
+
++(void)setupSavedWorks
+{
+    NSArray *bundleAuthors = [[NSBundle mainBundle] pathsForResourcesOfType:@"author" inDirectory:@"authors"];
+    
+    for (NSString *authorPath in bundleAuthors)
+    {
+        //unarchive json and create works to reference from
+        NSData *data = [NSData dataWithContentsOfFile:authorPath];
+        NSDictionary *info = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:nil];
+        
+        NSString *name = info[@"name"];
+        NSString *text = info[@"text"];
+        
+        IPWork *work = [[IPWork alloc] initWithType:IPWorkTypeInspiration name:name text:text];
+        [work saveToDisk];
+    }
 }
 
 @end

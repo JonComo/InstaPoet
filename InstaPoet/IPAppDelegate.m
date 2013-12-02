@@ -8,12 +8,33 @@
 
 #import "IPAppDelegate.h"
 
+#import "IPWork.h"
 #import "Macros.h"
 
 @implementation IPAppDelegate
 
++(void)clearFilesAtPath:(NSString *)path
+{
+    NSArray *files = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:path error:nil];
+    for (NSString *filename in files)
+    {
+        NSLog(@"FILE: %@", filename);
+        [[NSFileManager defaultManager] removeItemAtPath:[NSString stringWithFormat:@"%@/%@", path, filename] error:nil];
+    }
+}
+
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+    //[IPAppDelegate clearFilesAtPath:DOCUMENTS];
+    
+    self.window.backgroundColor = [UIColor whiteColor];
+    
+    if (![[NSUserDefaults standardUserDefaults] boolForKey:@"firstRun"])
+    {
+        [IPWork setupSavedWorks];
+        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"firstRun"];
+        [[NSUserDefaults standardUserDefaults] synchronize];
+    }
     
     return YES;
 }

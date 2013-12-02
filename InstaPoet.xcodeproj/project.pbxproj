@@ -7,8 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		8600A1BD17F4A5F800D12F32 /* nerudaPablo.author in Resources */ = {isa = PBXBuildFile; fileRef = 8600A1BC17F4A5F800D12F32 /* nerudaPablo.author */; };
 		861CB9101843BF5200E7CC9F /* NSURL+Unique.m in Sources */ = {isa = PBXBuildFile; fileRef = 861CB90F1843BF5200E7CC9F /* NSURL+Unique.m */; };
+		86472D85184C103C00C133AB /* authors in Resources */ = {isa = PBXBuildFile; fileRef = 86472D84184C103C00C133AB /* authors */; };
+		86472D88184C147600C133AB /* ISColorWheel.m in Sources */ = {isa = PBXBuildFile; fileRef = 86472D87184C147600C133AB /* ISColorWheel.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		864C4818177BE53E005505EC /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 864C4817177BE53E005505EC /* UIKit.framework */; };
 		864C481A177BE53E005505EC /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 864C4819177BE53E005505EC /* Foundation.framework */; };
 		864C481C177BE53E005505EC /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 864C481B177BE53E005505EC /* CoreGraphics.framework */; };
@@ -23,7 +24,6 @@
 		864C4841177BE553005505EC /* MVMarkov.m in Sources */ = {isa = PBXBuildFile; fileRef = 864C483D177BE553005505EC /* MVMarkov.m */; };
 		864C4842177BE553005505EC /* MVPhrase.m in Sources */ = {isa = PBXBuildFile; fileRef = 864C483F177BE553005505EC /* MVPhrase.m */; };
 		864C4846177BE9C7005505EC /* IPWork.m in Sources */ = {isa = PBXBuildFile; fileRef = 864C4845177BE9C7005505EC /* IPWork.m */; };
-		864C4849177BEA26005505EC /* IPWorksCollection.m in Sources */ = {isa = PBXBuildFile; fileRef = 864C4848177BEA26005505EC /* IPWorksCollection.m */; };
 		866339EB17948CA900C409C4 /* IPLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 866339EA17948CA900C409C4 /* IPLabel.m */; };
 		86AB4904177D35F800AC46AC /* IPAuthorsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 86AB4903177D35F800AC46AC /* IPAuthorsViewController.m */; };
 		86B9BD21177BF0DB00DF4B4A /* IPEditViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 86B9BD20177BF0DB00DF4B4A /* IPEditViewController.m */; };
@@ -40,9 +40,11 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		8600A1BC17F4A5F800D12F32 /* nerudaPablo.author */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = nerudaPablo.author; sourceTree = "<group>"; };
 		861CB90E1843BF5200E7CC9F /* NSURL+Unique.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSURL+Unique.h"; sourceTree = "<group>"; };
 		861CB90F1843BF5200E7CC9F /* NSURL+Unique.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSURL+Unique.m"; sourceTree = "<group>"; };
+		86472D84184C103C00C133AB /* authors */ = {isa = PBXFileReference; lastKnownFileType = folder; path = authors; sourceTree = "<group>"; };
+		86472D86184C147600C133AB /* ISColorWheel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ISColorWheel.h; sourceTree = "<group>"; };
+		86472D87184C147600C133AB /* ISColorWheel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ISColorWheel.m; sourceTree = "<group>"; };
 		864C4814177BE53E005505EC /* InstaPoet.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = InstaPoet.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		864C4817177BE53E005505EC /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		864C4819177BE53E005505EC /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -65,8 +67,6 @@
 		864C483F177BE553005505EC /* MVPhrase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MVPhrase.m; sourceTree = "<group>"; };
 		864C4844177BE9C7005505EC /* IPWork.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IPWork.h; sourceTree = "<group>"; };
 		864C4845177BE9C7005505EC /* IPWork.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IPWork.m; sourceTree = "<group>"; };
-		864C4847177BEA26005505EC /* IPWorksCollection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IPWorksCollection.h; sourceTree = "<group>"; };
-		864C4848177BEA26005505EC /* IPWorksCollection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IPWorksCollection.m; sourceTree = "<group>"; };
 		864C484A177BEABE005505EC /* Macros.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Macros.h; sourceTree = "<group>"; };
 		866339E917948CA900C409C4 /* IPLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IPLabel.h; sourceTree = "<group>"; };
 		866339EA17948CA900C409C4 /* IPLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IPLabel.m; sourceTree = "<group>"; };
@@ -108,14 +108,6 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		8600A1BB17F4A5F800D12F32 /* authors */ = {
-			isa = PBXGroup;
-			children = (
-				8600A1BC17F4A5F800D12F32 /* nerudaPablo.author */,
-			);
-			path = authors;
-			sourceTree = "<group>";
-		};
 		864C480B177BE53E005505EC = {
 			isa = PBXGroup;
 			children = (
@@ -137,6 +129,8 @@
 		864C4816177BE53E005505EC /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				86472D86184C147600C133AB /* ISColorWheel.h */,
+				86472D87184C147600C133AB /* ISColorWheel.m */,
 				86E052F317837E480086017F /* QuartzCore.framework */,
 				864C4817177BE53E005505EC /* UIKit.framework */,
 				864C4819177BE53E005505EC /* Foundation.framework */,
@@ -148,7 +142,7 @@
 		864C481D177BE53E005505EC /* InstaPoet */ = {
 			isa = PBXGroup;
 			children = (
-				8600A1BB17F4A5F800D12F32 /* authors */,
+				86472D84184C103C00C133AB /* authors */,
 				86E052DF17836D280086017F /* media */,
 				86B9BD1E177BF0CE00DF4B4A /* View */,
 				864C4843177BE558005505EC /* Model */,
@@ -186,8 +180,6 @@
 				864C483F177BE553005505EC /* MVPhrase.m */,
 				864C4844177BE9C7005505EC /* IPWork.h */,
 				864C4845177BE9C7005505EC /* IPWork.m */,
-				864C4847177BEA26005505EC /* IPWorksCollection.h */,
-				864C4848177BEA26005505EC /* IPWorksCollection.m */,
 				86E052F017837C340086017F /* IPFlowLayout.h */,
 				86E052F117837C340086017F /* IPFlowLayout.m */,
 				861CB90E1843BF5200E7CC9F /* NSURL+Unique.h */,
@@ -289,12 +281,12 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8600A1BD17F4A5F800D12F32 /* nerudaPablo.author in Resources */,
 				864C4822177BE53E005505EC /* InfoPlist.strings in Resources */,
 				864C482A177BE53E005505EC /* Default.png in Resources */,
 				864C482C177BE53E005505EC /* Default@2x.png in Resources */,
 				864C482E177BE53E005505EC /* Default-568h@2x.png in Resources */,
 				864C4831177BE53E005505EC /* MainStoryboard.storyboard in Resources */,
+				86472D85184C103C00C133AB /* authors in Resources */,
 				86E052E517836D280086017F /* icon@2x.png in Resources */,
 				86BB8009179F4B090027141C /* icon.png in Resources */,
 			);
@@ -313,7 +305,6 @@
 				864C4841177BE553005505EC /* MVMarkov.m in Sources */,
 				864C4842177BE553005505EC /* MVPhrase.m in Sources */,
 				864C4846177BE9C7005505EC /* IPWork.m in Sources */,
-				864C4849177BEA26005505EC /* IPWorksCollection.m in Sources */,
 				86B9BD21177BF0DB00DF4B4A /* IPEditViewController.m in Sources */,
 				86AB4904177D35F800AC46AC /* IPAuthorsViewController.m in Sources */,
 				861CB9101843BF5200E7CC9F /* NSURL+Unique.m in Sources */,
@@ -321,6 +312,7 @@
 				86E052D91783636E0086017F /* MBProgressHUD.m in Sources */,
 				86E052DC178367F00086017F /* IPButtonCell.m in Sources */,
 				86E052EC17836DB00086017F /* IPGraphics.m in Sources */,
+				86472D88184C147600C133AB /* ISColorWheel.m in Sources */,
 				86E052EF17836E230086017F /* IPButton.m in Sources */,
 				86E052F217837C340086017F /* IPFlowLayout.m in Sources */,
 				86E052FB1783A5BF0086017F /* IPMoreViewController.m in Sources */,

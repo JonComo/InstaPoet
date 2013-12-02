@@ -32,6 +32,8 @@ typedef enum
 
 -(id)initWithType:(IPWorkType)type name:(NSString *)name text:(NSString *)text;
 
++(void)setupSavedWorks;
++(NSArray *)localFiles;
 -(void)loadFromDiskCompletion:(void(^)(void))block;
 -(void)saveToDisk;
 
