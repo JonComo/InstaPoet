@@ -97,8 +97,10 @@
 {
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
         NSString *textPath = [NSString stringWithFormat:@"%@/text", [self.url path]];
+        NSString *modelPath = [NSString stringWithFormat:@"%@/model", [self.url path]];
+        
         _text = [NSKeyedUnarchiver unarchiveObjectWithFile:textPath];
-        //_model = [NSKeyedUnarchiver unarchiveObjectWithFile:];
+        _model = [NSKeyedUnarchiver unarchiveObjectWithFile:modelPath];
         
         dispatch_async(dispatch_get_main_queue(), ^{
             if (block) block();
@@ -114,9 +116,11 @@
     
     NSString *workPath = [NSString stringWithFormat:@"%@/work", [self.url path]];
     NSString *textPath = [NSString stringWithFormat:@"%@/text", [self.url path]];
+    NSString *modelPath = [NSString stringWithFormat:@"%@/model", [self.url path]];
     
     [NSKeyedArchiver archiveRootObject:self toFile:workPath];
     [NSKeyedArchiver archiveRootObject:self.text toFile:textPath];
+    [NSKeyedArchiver archiveRootObject:self.model toFile:modelPath];
 }
 
 +(NSArray *)localFiles
@@ -153,6 +157,15 @@
         IPWork *work = [[IPWork alloc] initWithType:IPWorkTypeInspiration name:name text:text];
         [work saveToDisk];
     }
+}
+
+-(void)generateModelCompletion:(void (^)(void))block
+{
+    self.model = [MVMarkov new];
+    [self.model generateModelWithString:self.text completion:^{
+        [self saveToDisk];
+        if (block) block();
+    }];
 }
 
 @end

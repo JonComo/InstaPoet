@@ -37,4 +37,6 @@ typedef enum
 -(void)loadFromDiskCompletion:(void(^)(void))block;
 -(void)saveToDisk;
 
+-(void)generateModelCompletion:(void(^)(void))block;
+
 @end

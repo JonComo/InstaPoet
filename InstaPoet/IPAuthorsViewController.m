@@ -128,13 +128,18 @@
     
     [author loadFromDiskCompletion:^{
         
-        MVMarkov *model = [MVMarkov new];
-        [model generateModelWithString:author.text completion:^{
+        if (!author.model)
+        {
+            [author generateModelCompletion:^{
+                self.workUser.model = author.model;
+                [self dismissViewControllerAnimated:YES completion:nil];
+            }];
             
-            self.workUser.model = model;
-            
-            [self dismissViewControllerAnimated:YES completion:nil];
-        }];
+            return;
+        }
+        
+        self.workUser.model = author.model;
+        [self dismissViewControllerAnimated:YES completion:nil];
     }];
 }
 
@@ -144,8 +149,7 @@
     
     float newWidth = self.view.frame.size.width;
     
-    if (self.interfaceOrientation != UIInterfaceOrientationPortrait && isRotating)
-    {
+    if (self.interfaceOrientation != UIInterfaceOrientationPortrait && isRotating){
         newWidth = self.view.frame.size.height;
     }
     

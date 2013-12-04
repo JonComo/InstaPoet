@@ -112,13 +112,11 @@
     
     [UIView animateWithDuration:animationDuration animations:^{
         
-        float statusHeight = 0;
         float frameHeight = self.view.frame.size.height;
         
-        float offset = (frameHeight + statusHeight - keyboardRect.origin.y);
+        float offset = (frameHeight - keyboardRect.origin.y);
         
         if (self.interfaceOrientation != UIInterfaceOrientationPortrait){
-            statusHeight = [UIApplication sharedApplication].statusBarFrame.size.width;
             frameHeight = self.view.frame.size.width;
         }
         
@@ -126,7 +124,7 @@
         {
             offset = keyboardRect.size.width;
         }else if (self.interfaceOrientation == UIInterfaceOrientationLandscapeLeft){
-            offset = (frameHeight + statusHeight - keyboardRect.origin.x);
+            offset = (frameHeight - keyboardRect.origin.x);
         }
         
         constraintBottom.constant = offset;
@@ -140,16 +138,14 @@
     {
         self.work.text = textViewMain.text;
         [self.work saveToDisk];
-    }else{
-        //delete
     }
 }
 
 - (IBAction)done:(id)sender
 {
     [textViewMain resignFirstResponder];
-    [self saveWork];
     
+    [self saveWork];
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
@@ -179,7 +175,8 @@
     
     optionsVC.work = self.work;
     
-    optionsVC.modalTransitionStyle = UIModalTransitionStyleFlipHorizontal;
+    optionsVC.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
+    
     [self presentViewController:optionsVC animated:YES completion:nil];
 }
 
@@ -224,18 +221,6 @@
 
 -(void)suggestWords
 {
-    if (textViewMain.text.length > 1)
-    {
-        NSString *periodTest = [textViewMain.text substringFromIndex:textViewMain.text.length-1];
-        
-        if ([periodTest isEqualToString:@"."])
-        {
-            //dont suggest any
-            [self showSuggestions:NO];
-            return;
-        }
-    }
-    
     [self.work.model suggestWordsForString:textViewMain.text completion:^(NSArray *words) {
         
         foundPhrases = [words copy];
@@ -245,27 +230,9 @@
         if (words.count > 0)
         {
             textEntered = @"";
-            [self showSuggestions:YES];
             [collectionViewWords scrollToItemAtIndexPath:[NSIndexPath indexPathForItem:0 inSection:0] atScrollPosition:UICollectionViewScrollPositionTop animated:NO];
-        }else{
-            [self showSuggestions:NO];
         }
     }];
-}
-
--(void)showSuggestions:(BOOL)show
-{
-    float targetHeight = show ? 120 : 40;
-    
-    [UIView animateWithDuration:0.3 animations:^{
-        constraintControlsHeight.constant = targetHeight;
-        [self.view layoutSubviews];
-    }];
-    
-    if (textViewMain.contentSize.height > textViewMain.frame.size.height){
-        CGPoint offset = CGPointMake(0, textViewMain.contentSize.height - textViewMain.frame.size.height);
-        [textViewMain setContentOffset:offset animated:YES];
-    }
 }
 
 -(UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
